@@ -14,8 +14,56 @@ const Hero = () => {
                 Think of <span className="font-bold">Codr</span> as your go-to
                 guide for navigating the sometimes overwhelming world after
                 graduation.
+
+                         {/* Contact Information for sm and larger screens - Bottom Left */}
+            <div className="hidden sm:flex absolute bottom-10 sm:w-1/3 md:w-3/9 lg:w-3/8 justify-between text-xs font-mono uppercase">
+              <div className="w-1/3 text-gray-700 text-left">
+                <p>GOT QUESTIONS? <br /> I'M HERE TO HELP</p>
+              </div>
+  
+              <div className="w-1/3 sm:w-1/4 text-black font-bold text-left">
+                <p>
+                  IF THIS SITE <br /> DOESN'T HAVE <br /> EVERYTHING YOU <br /> NEED, FEEL FREE TO <br /> GET IN TOUCH
+                </p>
+              </div>
+  
+              <div className="w-1/3 text-gray-700 text-left">
+              <a
+                  href="mailto:raahim.nade@gmail.com"
+                  className="underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  EMAIL
+                </a>
+                <br />
+                <a
+                  href="https://www.linkedin.com/in/raahim-nadeem/"
+                  className="underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  LINKEDIN
+                </a>
+                <br />
+                <a
+                  href="https://www.instagram.com/raahim.jpeg/"
+                  className="underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  INSTAGRAM
+                </a>
               </div>
             </div>
+              </div>
+
+              
+
+              
+            </div>
+
+
   
             {/* Contact Information for Mobile (hidden on sm and above) */}
             <div className="relative top-18 w-4/5 mx-auto flex justify-between text-center text-xs font-mono uppercase sm:hidden">
@@ -60,46 +108,14 @@ const Hero = () => {
               </div>
             </div>
   
-            {/* Contact Information for sm and larger screens - Bottom Left */}
-            <div className="hidden sm:flex absolute bottom-10 left-10 w-3/5 justify-between text-xs font-mono uppercase">
-              <div className="w-1/4 text-gray-700 text-left">
-                <p>GOT QUESTIONS? <br /> I'M HERE TO HELP</p>
-              </div>
-  
-              <div className="w-1/4 text-black font-bold text-left">
-                <p>
-                  IF THIS SITE <br /> DOESN'T HAVE <br /> EVERYTHING YOU <br /> NEED, FEEL FREE TO <br /> GET IN TOUCH
-                </p>
-              </div>
-  
-              <div className="w-1/4 text-gray-700 text-left">
-                <p>RAAHIM.NADE@GMAIL.COM</p>
-                <a
-                  href="https://www.linkedin.com/in/raahim-nadeem/"
-                  className="underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  LINKEDIN
-                </a>
-                <br />
-                <a
-                  href="https://www.instagram.com/raahim.jpeg/"
-                  className="underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  INSTAGRAM
-                </a>
-              </div>
-            </div>
+   
           </div>
   
           {/* Bottom-Right Image */}
           <img
             src="../public/portrait.png"
             alt="Portrait"
-            className="absolute bottom-0 w-7/10 left-1/2 transform -translate-x-1/2 sm:w-1/3 md:translate-x-2 sm:translate-x-1/5 lg:translate-x-1/5"
+            className="absolute bottom-0 max-w-5/10 left-1/2 transform -translate-x-1/2 sm:w-1/3 md:translate-x-1/3 sm:translate-x-1/5 lg:translate-x-1/5"
           />
         </div>
       </div>
