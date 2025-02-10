@@ -12,11 +12,13 @@
   "dependencies": {
     "@mui/material": "^6.4.3",
     "@mui/x-data-grid": "^7.26.0",
+    "@studio-freight/lenis": "^1.0.42",
     "@tailwindcss/vite": "^4.0.5",
     "@tanstack/react-table": "^8.20.6",
     "clsx": "^2.1.1",
     "framer-motion": "^12.4.2",
     "gsap": "^3.12.7",
+    "lenis": "^1.1.20",
     "lucide-react": "^0.475.0",
     "material-react-table": "^3.1.0",
     "mui": "^0.0.1",

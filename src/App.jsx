@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Hero from "./components/Hero";
 import NavBar from "./components/Navbar";
 import TipsPrep from "./components/TipsAndPrep/TipsPrep";
+import Companies from "./components/Companies";
+import Resources from "./components/Resources";
 
 const App = () => {
   return (
