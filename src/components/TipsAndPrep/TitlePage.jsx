@@ -1,4 +1,4 @@
-const TipsPrep = () => {
+const TitlePage = () => {
     return (
         <>
       <div className="relative h-dvh w-screen flex flex-col bg-[#F4F2ED] justify-center items-center  overflow-hidden">
@@ -29,11 +29,10 @@ const TipsPrep = () => {
         </div>
         </div>
 
-
         
      
       </>
     );
   };
   
-  export default TipsPrep;
+  export default TitlePage;
