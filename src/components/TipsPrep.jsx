@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaGraduationCap, FaBookOpen } from "react-icons/fa";
 
@@ -15,7 +15,6 @@ const TipsPrep = () => {
         {/* Title */}
         <motion.div
           className="text-8xl mt-22 font-bold text-black hover:text-[#FF6542] transition-colors duration-700"
-        //   whileHover={{ scale: 1.1 }}
         >
           tips & prep
         </motion.div>
@@ -66,12 +65,25 @@ const TipsPrep = () => {
                 feeling like a deer in headlights.
               </p>
             ) : (
-              <p>
-                You’ve got time, and that’s a superpower. 🦸‍♂️ This is the phase
-                where you can experiment, explore different fields, and build a
-                killer foundation. Let’s talk about which courses and skills will
-                set you up for an epic future.
-              </p>
+              <div>
+                <p>
+                  You’ve got time, and that’s a superpower. 🦸‍♂️ This is the phase
+                  where you can experiment, explore different fields, and build a
+                  killer foundation. Let’s talk about which courses and skills will
+                  set you up for an epic future.
+                </p>
+                <h3 className="mt-6 text-xl font-bold">Course Recommendations</h3>
+                <p className="mt-2">
+                  Since I’m from LUMS, some of these courses may not exist at your
+                  university, but I believe most CS programs will have similar
+                  alternatives.
+                </p>
+                <ul className="mt-4 space-y-2">
+                  <li><strong>1. I'm Too Young To Die</strong> - Beginner-friendly courses to get you started.</li>
+                  <li><strong>2. Hurt Me Plenty</strong> - A moderate challenge with solid rewards.</li>
+                  <li><strong>3. I Am Death Incarnate</strong> - The ultimate test of your endurance and skill.</li>
+                </ul>
+              </div>
             )}
           </motion.div>
         )}
