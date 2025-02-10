@@ -10,20 +10,33 @@ const Hero = () => {
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-22 px-5 sm:px-24">
             <div className="text-9xl font-bold text-[#FF6542]">codr</div>
-            <div className="mt-10 text-xl sm:mt-18 lg:mt-30 sm:text-2xl md:w-3/4 lg:w-3/4 xl:w-3/4 2xl:w-1/2 px-5 md:px-24 xl:px-48">
-              Think of <span className="font-bold">codr</span> as your go-to
-              guide for navigating the sometimes overwhelming world after
-              graduation.
+            <div className="mt-10 text-xl sm:mt-18 lg:mt-30 sm:text-2xl md:w-3/4 lg:w-3/4 xl:w-3/4 2xl:w-1/2 ">
+              <div className="px-5 md:px-24 xl:px-48">
+                Think of <span className="font-bold">codr</span> as your go-to
+                guide for navigating the sometimes overwhelming world after
+                graduation.
+              </div>
+
+              {/* Poem*/}
+              <div className="hidden lg:flex mt-10 lg:mt-20 xl:mt-20 w-1/4 text-grey-700 text-xs font-mono opacity-50">
+                <p>
+                  "It matters not how strait the gate, <br />
+                  How charged with punishments the scroll, <br />
+                  I am the master of my fate, <br />
+                  I am the captain of my soul.” <br /> <br />- Invictus by
+                  William Ernest Henley
+                </p>
+              </div>
+
               {/* Contact Information for sm and larger screens - Bottom Left */}
-              <div className="hidden sm:flex absolute bottom-10 sm:w-1/3 md:w-3/9 lg:w-3/8 justify-between text-xs font-mono uppercase">
-                <div className="w-1/4 md:w-1/6 text-gray-700 text-left">
+              <div className="hidden sm:flex absolute bottom-6 sm:w-1/3 md:w-3/9 lg:w-3/8 justify-between text-xs font-mono uppercase xl:pl-48">
+                <div className="w-1/4 md:w-1/6 text-gray-700 text-left ">
                   <p>GOT QUESTIONS? I'M HERE TO HELP</p>
                 </div>
 
                 <div className="w-1/4 md:w-1/6 text-black font-bold text-left">
                   <p>
-                    IF THIS SITE DOESN'T HAVE EVERYTHING YOU NEED, FEEL FREE TO
-                    GET IN TOUCH
+                    If you can't find what you need, feel free to reach out.
                   </p>
                 </div>
 
