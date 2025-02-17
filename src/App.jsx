@@ -4,6 +4,7 @@ import NavBar from "./components/Navbar";
 import TipsPrep from "./components/TipsAndPrep/TipsPrep";
 import Companies from "./components/Companies";
 import ResourcesPage from "./components/Resources/ResourcesPage";
+import { Analytics } from "@vercel/analytics/react"
 
 const App = () => {
   return (
@@ -15,8 +16,8 @@ const App = () => {
           <Route path="/tips-prep" element={<TipsPrep />} />
           <Route path="/companies" element={<Companies />} />
           <Route path="/resources" element={<ResourcesPage />} />
-
         </Routes>
+        <Analytics />
       </main>
     </Router>
   );
