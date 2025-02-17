@@ -46,7 +46,7 @@ const NavBar = () => {
     <div
       ref={navContainerRef}
       className={`fixed inset-x-0 top-4 z-50 h-16 transition-all duration-700 sm:inset-x-6 rounded-xl ${
-        isScrolledUp ? "bg-[#121212] text-white" : "bg-transparent text-black"
+        isScrolledUp ? "bg-[#121212] text-white" : "bg-transparent text-[#2b2b2b]"
       }`}
     >
       <header className="absolute top-1/2 w-full -translate-y-1/2">
@@ -54,15 +54,18 @@ const NavBar = () => {
           <div className="flex items-center gap-6">
             {navItems.map((item, index) => (
               <Link
-                key={index}
-                to={item.path}
-                className="relative text-xs sm:text-sm uppercase font-medium transition duration-300 
-                          before:absolute before:bottom-0 before:left-0 before:h-[2px] before:w-full 
-                          before:origin-left before:scale-x-0 before:bg-white before:transition-transform 
-                          before:duration-300 hover:before:scale-x-100"
-              >
-                {item.name}
-              </Link>
+              key={index}
+              to={item.path}
+              className={`relative text-xs sm:text-sm uppercase font-medium transition duration-300 
+                before:absolute before:bottom-0 before:left-0 before:h-[2px] before:w-full 
+                before:origin-left before:scale-x-0 before:transition-transform 
+                before:duration-300 hover:before:scale-x-100 ${
+                  isScrolledUp ? "before:bg-white" : "before:bg-[#2b2b2b]"
+                }`}
+            >
+              {item.name}
+            </Link>
+            
             ))}
           </div>
         </nav>
