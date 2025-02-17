@@ -118,7 +118,7 @@ const Hero = () => {
 
         {/* Bottom-Right Image */}
         <img
-          src="../public/portrait.png"
+          src="/portrait.png"
           alt="Portrait"
           className="absolute bottom-0 max-w-5/10 left-1/2 transform -translate-x-1/2 sm:w-1/3 md:translate-x-1/3 sm:translate-x-1/5 lg:translate-x-1/5"
         />
