@@ -30,7 +30,8 @@ const TipsPage = () => {
     {
       number: "04",
       title: "04. GPA vs. Skills: Why Not Both?",
-      description: "Many people treat GPA and skills as mutually exclusive—focusing on one while neglecting the other. The result? A lot end up mastering neither. Skills matter—no doubt about it. But GPA isn’t meaningless either. Plenty of companies filter applicants by GPA, and if you don’t meet the cutoff, your skills might not even get a chance to shine. The key? Give your best to both. If you truly put in the effort for your GPA and it didn’t work out, that’s fine—life isn’t over. But the condition is that you truly tried. Don’t let laziness disguise itself as a career strategy. A strong GPA shows discipline, and real-world skills set you apart. Maximize your chances. Work smart, work hard, and keep moving forward.",
+      description:
+        "Many people treat GPA and skills as mutually exclusive—focusing on one while neglecting the other. The result? A lot end up mastering neither. Skills matter—no doubt about it. But GPA isn’t meaningless either. Plenty of companies filter applicants by GPA, and if you don’t meet the cutoff, your skills might not even get a chance to shine. The key? Give your best to both. If you truly put in the effort for your GPA and it didn’t work out, that’s fine—life isn’t over. But the condition is that you truly tried. Don’t let laziness disguise itself as a career strategy. A strong GPA shows discipline, and real-world skills set you apart. Maximize your chances. Work smart, work hard, and keep moving forward.",
       videoSrc: "/Videos/GPA.mp4",
     },
     {
@@ -58,20 +59,22 @@ const TipsPage = () => {
       number: "08",
       title: "08. Side Projects Will Set You Apart.",
       description:
-      "Use your breaks—summer, winter, or spring—to dive into side projects. They don’t just sharpen your skills; they make you stand out in interviews. If you’re in a class that lets you build something of your own, take full advantage of it. Don’t just follow the crowd and copy tutorials—get creative. Personal projects are often the most memorable part of interviews, and they’ll give you an edge. For example, my friend and I, huge fans of DOOM, created a DOOM clone with branching narratives inspired by videogames like Until Dawn. It was rough, but we had a blast making it—and it became the thing recruiters loved discussing most from my resume. So, find what excites you, build something unique, and make it yours. The effort will pay off.",      
+        "Use your breaks—summer, winter, or spring—to dive into side projects. They don’t just sharpen your skills; they make you stand out in interviews. If you’re in a class that lets you build something of your own, take full advantage of it. Don’t just follow the crowd and copy tutorials—get creative. Personal projects are often the most memorable part of interviews, and they’ll give you an edge. For example, my friend and I, huge fans of DOOM, created a DOOM clone with branching narratives inspired by videogames like Until Dawn. It was rough, but we had a blast making it—and it became the thing recruiters loved discussing most from my resume. So, find what excites you, build something unique, and make it yours. The effort will pay off.",
       videoSrc: "/Videos/SideProjects.mp4",
     },
     {
       number: "09",
       title: "09. Explore Hard, Niche Courses.",
-      description:"CS is huge, and it can feel overwhelming, but don’t shy away from challenging courses like machine learning, computer vision, or operating systems. They might seem tough at first, but they’ll expand your thinking and open doors to new areas of interest. You never know—these courses might even help you discover a specialization that excites you more than the usual web development route. So take the plunge and let these challenges shape your journey!",
+      description:
+        "CS is huge, and it can feel overwhelming, but don’t shy away from challenging courses like machine learning, computer vision, or operating systems. They might seem tough at first, but they’ll expand your thinking and open doors to new areas of interest. You never know—these courses might even help you discover a specialization that excites you more than the usual web development route. So take the plunge and let these challenges shape your journey!",
       videoSrc: "/Videos/NicheCourses.mp4",
     },
     {
       number: "10",
       title: "10. Don’t overlook Glassdoor.",
-      description: "It’s an excellent resource for getting insights into a company’s interview process, employee reviews, pros and cons, and even a basic idea of their salary packages. While it’s not always 100% accurate or up-to-date, it’s incredibly helpful as a starting point.",
-      videoSrc: "/Videos/Glassdoor.mp4"
+      description:
+        "It’s an excellent resource for getting insights into a company’s interview process, employee reviews, pros and cons, and even a basic idea of their salary packages. While it’s not always 100% accurate or up-to-date, it’s incredibly helpful as a starting point.",
+      videoSrc: "/Videos/Glassdoor.mp4",
     },
   ];
 
@@ -135,7 +138,7 @@ const TipsPage = () => {
               <div className="hidden sm:flex absolute left-1/2 -translate-x-1/2 bg-[#2b2b2b] text-white font-bold text-lg md:text-2xl flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-white circle-number">
                 {tip.number}
               </div>
-              <div className="hidden md:flex w-[2px] h-full bg-white"></div>
+            <div className="hidden md:flex w-[2px] h-full bg-white "></div>
             </div>
             {tip.videoSrc && (
               <div className="flex-1 flex justify-center items-center p-10 video-container">

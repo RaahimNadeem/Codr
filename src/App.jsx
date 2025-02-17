@@ -3,7 +3,7 @@ import Hero from "./components/Hero";
 import NavBar from "./components/Navbar";
 import TipsPrep from "./components/TipsAndPrep/TipsPrep";
 import Companies from "./components/Companies";
-import Resources from "./components/Resources";
+import ResourcesPage from "./components/Resources/ResourcesPage";
 
 const App = () => {
   return (
@@ -14,7 +14,7 @@ const App = () => {
           <Route path="/" element={<Hero />} />
           <Route path="/tips-prep" element={<TipsPrep />} />
           <Route path="/companies" element={<Companies />} />
-          <Route path="/resources" element={<Resources />} />
+          <Route path="/resources" element={<ResourcesPage />} />
 
         </Routes>
       </main>
