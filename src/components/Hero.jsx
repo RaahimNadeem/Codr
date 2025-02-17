@@ -8,8 +8,8 @@ const Hero = () => {
       >
         {/* Title */}
         <div className="absolute left-0 top-0 z-40 size-full">
-          <div className="mt-4 px-5 sm:px-24">
-            <div className="text-9xl font-bold text-[#FF6542] xl:text-[16rem]">codr</div>
+          <div className="mt-24 lg:mt-4 px-5 sm:px-24">
+            <div className="text-9xl font-bold text-[#FF6542] lg:text-[12rem] xl:text-[16rem]">codr</div>
             <div className="mt-10 text-xl sm:mt-18 lg:mt-18 sm:text-2xl xl:text-3xl md:w-3/4 lg:w-3/4 xl:w-3/4 2xl:w-3/5 ">
               <div className="px-5 md:px-24 xl:px-64">
                 Think of <span className="font-bold">codr</span> as your go-to
@@ -18,7 +18,7 @@ const Hero = () => {
               </div>
 
               {/* Poem*/}
-              <div className="hidden lg:flex mt-10 lg:mt-20 xl:mt-20 w-1/4 text-grey-700 text-xs font-mono opacity-50">
+              <div className="hidden 2xl:flex mt-10 lg:mt-20 xl:mt-20 w-1/4 text-grey-700 text-xs font-mono opacity-50">
                 <p>
                   "It matters not how strait the gate, <br />
                   How charged with punishments the scroll, <br />
@@ -73,7 +73,7 @@ const Hero = () => {
           </div>
 
           {/* Contact Information for Mobile (hidden on sm and above) */}
-          <div className="relative top-18 w-4/5 mx-auto flex justify-between text-center text-xs font-mono uppercase sm:hidden">
+          <div className="relative top-12 w-4/5 mx-auto flex justify-between text-center text-xs font-mono uppercase sm:hidden">
             <div className="w-1/4 text-gray-700 text-left">
               <p>GOT QUESTIONS? I'M HERE TO HELP</p>
             </div>
@@ -118,7 +118,7 @@ const Hero = () => {
 
         {/* Bottom-Right Image */}
         <img
-          src="../public/portrait.png"
+          src="/Videos/Portrait.png"
           alt="Portrait"
           className="absolute bottom-0 max-w-5/10 left-1/2 transform -translate-x-1/2 sm:w-1/3 md:translate-x-1/3 sm:translate-x-1/5 lg:translate-x-1/5"
         />
