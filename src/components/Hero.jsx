@@ -8,10 +8,10 @@ const Hero = () => {
       >
         {/* Title */}
         <div className="absolute left-0 top-0 z-40 size-full">
-          <div className="mt-22 px-5 sm:px-24">
-            <div className="text-9xl font-bold text-[#FF6542]">codr</div>
-            <div className="mt-10 text-xl sm:mt-18 lg:mt-30 sm:text-2xl md:w-3/4 lg:w-3/4 xl:w-3/4 2xl:w-1/2 ">
-              <div className="px-5 md:px-24 xl:px-48">
+          <div className="mt-4 px-5 sm:px-24">
+            <div className="text-9xl font-bold text-[#FF6542] xl:text-[16rem]">codr</div>
+            <div className="mt-10 text-xl sm:mt-18 lg:mt-18 sm:text-2xl xl:text-3xl md:w-3/4 lg:w-3/4 xl:w-3/4 2xl:w-3/5 ">
+              <div className="px-5 md:px-24 xl:px-64">
                 Think of <span className="font-bold">codr</span> as your go-to
                 guide for navigating the sometimes overwhelming world after
                 graduation.

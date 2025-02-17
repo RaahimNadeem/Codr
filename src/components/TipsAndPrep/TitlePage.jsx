@@ -9,7 +9,7 @@ const TitlePage = () => {
         >
           {/* Title */}
           <div
-            className=" text-6xl lg:text-9xl font-bold text-black hover:text-[#FF6542] transition-colors duration-700"
+            className=" text-6xl lg:text-9xl font-bold text-[#FF6542] hover:text-[#2b2b2b] transition-colors duration-700"
           >
             tips & prep
           </div>
