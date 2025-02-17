@@ -5,6 +5,14 @@
   text-align: center;
 }
 
+/* styles.css or your preferred CSS file */
+@media (max-height: 799px) {
+  .h-hidden {
+    @apply hidden;
+  }
+}
+
+
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -78,8 +78,8 @@ const Hero = () => {
               <p>GOT QUESTIONS? I'M HERE TO HELP</p>
             </div>
 
-            <div className="w-1/4 text-black font-bold text-left">
-              <p>
+            <div className="w-1/4 text-black font-bold text-left hidden">
+            <p>
                 If this site doesn't have everything you need, feel free to
                 reach out
               </p>
