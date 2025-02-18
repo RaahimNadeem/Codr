@@ -29,7 +29,7 @@ const Hero = () => {
               </div>
 
               {/* Contact Information for sm and larger screens - Bottom Left */}
-              <div className="hidden sm:flex absolute bottom-6 sm:w-1/3 md:w-3/9 lg:w-3/8 justify-between text-xs font-mono uppercase xl:pl-48">
+              <div className="hidden sm:flex absolute bottom-6 mt-10 sm:w-1/3 md:w-3/9 lg:w-3/8 justify-between text-xs font-mono uppercase xl:pl-48">
                 <div className="w-1/4 md:w-1/6 text-gray-700 text-left ">
                   <p>GOT QUESTIONS? I'M HERE TO HELP</p>
                 </div>
@@ -73,7 +73,7 @@ const Hero = () => {
           </div>
 
           {/* Contact Information for Mobile (hidden on sm and above) */}
-          <div className="relative top-12 w-4/5 mx-auto flex justify-between text-center text-xs font-mono uppercase sm:hidden">
+          <div className="relative top-12 w-4/5 mx-auto  flex justify-between text-center text-xs font-mono uppercase sm:hidden">
             <div className="w-1/4 text-gray-700 text-left">
               <p>GOT QUESTIONS? I'M HERE TO HELP</p>
             </div>
@@ -120,7 +120,7 @@ const Hero = () => {
         <img
           src="/Videos/Portrait.png"
           alt="Portrait"
-          className="absolute bottom-0 max-w-5/10 left-1/2 transform -translate-x-1/2 sm:w-1/3 md:translate-x-1/3 sm:translate-x-1/5 lg:translate-x-1/5"
+          className="absolute bottom-0 max-w-5/10 left-1/2 transform -translate-x-1/2  sm:w-1/3 md:translate-x-1/3 sm:translate-x-1/5 lg:translate-x-1/5"
         />
       </div>
     </div>
