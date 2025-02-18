@@ -39,7 +39,7 @@ Styling: TailwindCSS for designing a responsive and user-friendly interface.
 
 ## Contributing
 I welcome contributions from the community! To contribute:
-1, **Fork the Repository**: Click on the 'Fork' button at the top right of this page.
+1. **Fork the Repository**: Click on the 'Fork' button at the top right of this page.
 2. **Create a New Branch**: Use git checkout -b feature-branch-name to create a new branch.
 3. **Make Your Changes**: Implement your feature or fix.
 4. **Commit Changes**: Use git commit -m 'Description of your changes'.
