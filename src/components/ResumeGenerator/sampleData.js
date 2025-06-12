@@ -36,7 +36,7 @@ export const sampleResumeData = {
       title: 'Software Engineer',
       company: 'GoSaaS, Inc.',
       location: 'Lahore, PK',
-      dates: 'June 2014 — April 2025',
+      dates: 'June 2024 — April 2025',
       responsibilities: [
         'Designed workflows to reduce project timelines and maintain data integrity, minimizing disruptions during the migration and ensuring a smooth transition to the new system.',
         'Contributed in data migration for company’s biggest client to date, extracting, transforming, and loading (ETL) of 6 million rows of data into their new Oracle AGILE PLM system.',
