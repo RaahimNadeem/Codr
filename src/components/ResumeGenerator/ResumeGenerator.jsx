@@ -1,0 +1,1006 @@
+import React, { useState } from 'react';
+import { FaUser, FaGraduationCap, FaBriefcase, FaCode, FaDownload, FaCopy, FaPlus, FaTrash, FaEye, FaFilePdf, FaMagic } from 'react-icons/fa';
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+import { generateLatexCode } from './latexGenerator';
+import PDFPreview from './PDFPreview';
+import { PDFService } from './pdfService';
+import { sampleResumeData } from './sampleData';
+
+const ResumeGenerator = () => {
+  const [resumeData, setResumeData] = useState({
+    personalInfo: {
+      name: '',
+      phone: '',
+      email: '',
+      linkedin: '',
+      github: '',
+      website: ''
+    },
+    education: [
+      {
+        institution: '',
+        location: '',
+        degree: '',
+        dates: '',
+        gpa: '',
+        honors: ''
+      }
+    ],
+    experience: [
+      {
+        title: '',
+        company: '',
+        location: '',
+        dates: '',
+        responsibilities: ['']
+      }
+    ],
+    projects: [
+      {
+        name: '',
+        technologies: '',
+        dates: '',
+        description: ['']
+      }
+    ],
+    skills: {
+      languages: '',
+      frameworks: '',
+      developerTools: '',
+      libraries: ''
+    }
+  });
+
+  const [activeTab, setActiveTab] = useState('personal');
+  const [latexCode, setLatexCode] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
+  const [showPDFPreview, setShowPDFPreview] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  const updatePersonalInfo = (field, value) => {
+    setResumeData(prev => ({
+      ...prev,
+      personalInfo: {
+        ...prev.personalInfo,
+        [field]: value
+      }
+    }));
+  };
+
+  const updateEducation = (index, field, value) => {
+    setResumeData(prev => ({
+      ...prev,
+      education: prev.education.map((edu, i) => 
+        i === index ? { ...edu, [field]: value } : edu
+      )
+    }));
+  };
+
+  const addEducation = () => {
+    setResumeData(prev => ({
+      ...prev,
+      education: [...prev.education, {
+        institution: '',
+        location: '',
+        degree: '',
+        dates: '',
+        gpa: '',
+        honors: ''
+      }]
+    }));
+  };
+
+  const removeEducation = (index) => {
+    setResumeData(prev => ({
+      ...prev,
+      education: prev.education.filter((_, i) => i !== index)
+    }));
+  };
+
+  const updateExperience = (index, field, value) => {
+    setResumeData(prev => ({
+      ...prev,
+      experience: prev.experience.map((exp, i) => 
+        i === index ? { ...exp, [field]: value } : exp
+      )
+    }));
+  };
+
+  const updateExperienceResponsibility = (expIndex, respIndex, value) => {
+    setResumeData(prev => ({
+      ...prev,
+      experience: prev.experience.map((exp, i) => 
+        i === expIndex ? {
+          ...exp,
+          responsibilities: exp.responsibilities.map((resp, j) => 
+            j === respIndex ? value : resp
+          )
+        } : exp
+      )
+    }));
+  };
+
+  const addExperience = () => {
+    setResumeData(prev => ({
+      ...prev,
+      experience: [...prev.experience, {
+        title: '',
+        company: '',
+        location: '',
+        dates: '',
+        responsibilities: ['']
+      }]
+    }));
+  };
+
+  const removeExperience = (index) => {
+    setResumeData(prev => ({
+      ...prev,
+      experience: prev.experience.filter((_, i) => i !== index)
+    }));
+  };
+
+  const addResponsibility = (expIndex) => {
+    setResumeData(prev => ({
+      ...prev,
+      experience: prev.experience.map((exp, i) => 
+        i === expIndex ? {
+          ...exp,
+          responsibilities: [...exp.responsibilities, '']
+        } : exp
+      )
+    }));
+  };
+
+  const removeResponsibility = (expIndex, respIndex) => {
+    setResumeData(prev => ({
+      ...prev,
+      experience: prev.experience.map((exp, i) => 
+        i === expIndex ? {
+          ...exp,
+          responsibilities: exp.responsibilities.filter((_, j) => j !== respIndex)
+        } : exp
+      )
+    }));
+  };
+
+  const updateProject = (index, field, value) => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: prev.projects.map((proj, i) => 
+        i === index ? { ...proj, [field]: value } : proj
+      )
+    }));
+  };
+
+  const updateProjectDescription = (projIndex, descIndex, value) => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: prev.projects.map((proj, i) => 
+        i === projIndex ? {
+          ...proj,
+          description: proj.description.map((desc, j) => 
+            j === descIndex ? value : desc
+          )
+        } : proj
+      )
+    }));
+  };
+
+  const addProject = () => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: [...prev.projects, {
+        name: '',
+        technologies: '',
+        dates: '',
+        description: ['']
+      }]
+    }));
+  };
+
+  const removeProject = (index) => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: prev.projects.filter((_, i) => i !== index)
+    }));
+  };
+
+  const addProjectDescription = (projIndex) => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: prev.projects.map((proj, i) => 
+        i === projIndex ? {
+          ...proj,
+          description: [...proj.description, '']
+        } : proj
+      )
+    }));
+  };
+
+  const removeProjectDescription = (projIndex, descIndex) => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: prev.projects.map((proj, i) => 
+        i === projIndex ? {
+          ...proj,
+          description: proj.description.filter((_, j) => j !== descIndex)
+        } : proj
+      )
+    }));
+  };
+
+  const updateSkills = (field, value) => {
+    setResumeData(prev => ({
+      ...prev,
+      skills: {
+        ...prev.skills,
+        [field]: value
+      }
+    }));
+  };
+
+  const generateResume = () => {
+    const latex = generateLatexCode(resumeData);
+    setLatexCode(latex);
+    setShowPreview(true);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(latexCode);
+    alert('LaTeX code copied to clipboard!');
+  };
+
+  const downloadLatex = () => {
+    const blob = new Blob([latexCode], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${resumeData.personalInfo.name.replace(/\s+/g, '_')}_resume.tex`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const generatePDFFromLatex = async () => {
+    setIsGeneratingPDF(true);
+    try {
+      const fileName = resumeData.personalInfo.name ? 
+        resumeData.personalInfo.name.replace(/\s+/g, '_') : 'resume';
+      
+      const pdfBlob = await PDFService.generatePDF(latexCode, fileName);
+      PDFService.downloadBlob(pdfBlob, `${fileName}.pdf`);
+      
+      alert('PDF generated successfully!');
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      alert(`PDF generation failed: ${error.message}\n\nPlease copy the LaTeX code and use it with Overleaf.com instead.`);
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
+  const loadSampleData = () => {
+    setResumeData(sampleResumeData);
+    alert('Sample data loaded! You can now see how Jake\'s resume looks and modify it.');
+  };
+
+  const tabs = [
+    { id: 'personal', label: 'Personal Info', icon: FaUser },
+    { id: 'education', label: 'Education', icon: FaGraduationCap },
+    { id: 'experience', label: 'Experience', icon: FaBriefcase },
+    { id: 'projects', label: 'Projects', icon: FaCode },
+    { id: 'skills', label: 'Skills', icon: FaCode }
+  ];
+
+  return (
+    <div className="relative min-h-screen w-screen overflow-x-hidden bg-[#F4F2ED]">
+      <div className="relative z-10 min-h-screen w-screen px-5 py-24">
+        
+        {/* Header */}
+        <div className="text-center mb-12 max-w-6xl mx-auto">
+          <h1 className="text-6xl lg:text-8xl font-bold text-[#FF6542] hover:text-[#2b2b2b] transition-colors duration-700 mb-6">
+            Resume Generator
+          </h1>
+          <p className="text-lg lg:text-xl text-[#2b2b2b] leading-relaxed">
+            Create a professional, ATS-friendly resume using Jake's proven LaTeX template. 
+            Fill in your details and generate ready-to-use LaTeX code or download as PDF.
+          </p>
+          
+          {/* Load Sample Data Button */}
+          <div className="mt-6">
+            <button
+              onClick={loadSampleData}
+              className="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition-colors duration-300 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center space-x-2"
+            >
+              <FaMagic />
+              <span>Load Sample Data</span>
+            </button>
+            <p className="text-sm text-gray-600 mt-2">
+              See Jake's original resume as an example and customize it for yourself
+            </p>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto">
+          {!showPreview && !showPDFPreview ? (
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              
+              {/* Sidebar Navigation */}
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-2xl shadow-xl p-6 sticky top-24">
+                  <h3 className="text-xl font-bold text-[#2b2b2b] mb-6">Resume Sections</h3>
+                  <nav className="space-y-2">
+                    {tabs.map((tab) => {
+                      const Icon = tab.icon;
+                      return (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveTab(tab.id)}
+                          className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors duration-200 ${
+                            activeTab === tab.id
+                              ? 'bg-[#FF6542] text-white'
+                              : 'text-[#2b2b2b] hover:bg-gray-100'
+                          }`}
+                        >
+                          <Icon className="text-lg" />
+                          <span className="font-medium">{tab.label}</span>
+                        </button>
+                      );
+                    })}
+                  </nav>
+                  
+                  <div className="mt-8">
+                    <button
+                      onClick={generateResume}
+                      className="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 flex items-center justify-center space-x-2 mb-4"
+                    >
+                      <FaEye />
+                      <span>Generate Resume</span>
+                    </button>
+                    
+                    {/* Quick Preview Button */}
+                    <button
+                      onClick={() => {
+                        const latex = generateLatexCode(resumeData);
+                        setLatexCode(latex);
+                        setShowPDFPreview(true);
+                      }}
+                      className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center space-x-2"
+                    >
+                      <FaFilePdf />
+                      <span>Quick PDF Preview</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Content */}
+              <div className="lg:col-span-3">
+                <div className="bg-white rounded-2xl shadow-xl p-8">
+                  
+                  {/* Personal Information */}
+                  {activeTab === 'personal' && (
+                    <div>
+                      <h2 className="text-2xl font-bold text-[#2b2b2b] mb-6 flex items-center">
+                        <FaUser className="mr-3 text-[#FF6542]" />
+                        Personal Information
+                      </h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                          <input
+                            type="text"
+                            value={resumeData.personalInfo.name}
+                            onChange={(e) => updatePersonalInfo('name', e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            placeholder="Jake Ryan"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+                          <input
+                            type="text"
+                            value={resumeData.personalInfo.phone}
+                            onChange={(e) => updatePersonalInfo('phone', e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            placeholder="123-456-7890"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                          <input
+                            type="email"
+                            value={resumeData.personalInfo.email}
+                            onChange={(e) => updatePersonalInfo('email', e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            placeholder="jake@su.edu"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">LinkedIn Profile</label>
+                          <input
+                            type="text"
+                            value={resumeData.personalInfo.linkedin}
+                            onChange={(e) => updatePersonalInfo('linkedin', e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            placeholder="linkedin.com/in/jake"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">GitHub Profile</label>
+                          <input
+                            type="text"
+                            value={resumeData.personalInfo.github}
+                            onChange={(e) => updatePersonalInfo('github', e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            placeholder="github.com/jake"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Personal Website</label>
+                          <input
+                            type="text"
+                            value={resumeData.personalInfo.website}
+                            onChange={(e) => updatePersonalInfo('website', e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            placeholder="www.jake.com"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Education */}
+                  {activeTab === 'education' && (
+                    <div>
+                      <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-bold text-[#2b2b2b] flex items-center">
+                          <FaGraduationCap className="mr-3 text-[#FF6542]" />
+                          Education
+                        </h2>
+                        <button
+                          onClick={addEducation}
+                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center space-x-2"
+                        >
+                          <FaPlus />
+                          <span>Add Education</span>
+                        </button>
+                      </div>
+                      
+                      {resumeData.education.map((edu, index) => (
+                        <div key={index} className="mb-8 p-6 border border-gray-200 rounded-lg">
+                          <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-[#2b2b2b]">Education {index + 1}</h3>
+                            {resumeData.education.length > 1 && (
+                              <button
+                                onClick={() => removeEducation(index)}
+                                className="text-red-500 hover:text-red-700 transition-colors duration-300"
+                              >
+                                <FaTrash />
+                              </button>
+                            )}
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Institution *</label>
+                              <input
+                                type="text"
+                                value={edu.institution}
+                                onChange={(e) => updateEducation(index, 'institution', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="Southwestern University"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Location *</label>
+                              <input
+                                type="text"
+                                value={edu.location}
+                                onChange={(e) => updateEducation(index, 'location', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="Georgetown, TX"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Degree *</label>
+                              <input
+                                type="text"
+                                value={edu.degree}
+                                onChange={(e) => updateEducation(index, 'degree', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="Bachelor of Arts in Computer Science, Minor in Business"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Dates *</label>
+                              <input
+                                type="text"
+                                value={edu.dates}
+                                onChange={(e) => updateEducation(index, 'dates', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="Aug. 2018 -- May 2021"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">GPA (Optional)</label>
+                              <input
+                                type="text"
+                                value={edu.gpa}
+                                onChange={(e) => updateEducation(index, 'gpa', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="3.85/4.0"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Honors/Awards (Optional)</label>
+                              <input
+                                type="text"
+                                value={edu.honors}
+                                onChange={(e) => updateEducation(index, 'honors', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="Cum Laude, Dean's List"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Experience */}
+                  {activeTab === 'experience' && (
+                    <div>
+                      <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-bold text-[#2b2b2b] flex items-center">
+                          <FaBriefcase className="mr-3 text-[#FF6542]" />
+                          Experience <span className="text-sm font-normal text-gray-500 ml-2">(Optional)</span>
+                        </h2>
+                        <button
+                          onClick={addExperience}
+                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center space-x-2"
+                        >
+                          <FaPlus />
+                          <span>Add Experience</span>
+                        </button>
+                      </div>
+                      
+                      {resumeData.experience.map((exp, expIndex) => (
+                        <div key={expIndex} className="mb-8 p-6 border border-gray-200 rounded-lg">
+                          <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-[#2b2b2b]">Experience {expIndex + 1}</h3>
+                            {resumeData.experience.length > 1 && (
+                              <button
+                                onClick={() => removeExperience(expIndex)}
+                                className="text-red-500 hover:text-red-700 transition-colors duration-300"
+                              >
+                                <FaTrash />
+                              </button>
+                            )}
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Job Title</label>
+                              <input
+                                type="text"
+                                value={exp.title}
+                                onChange={(e) => updateExperience(expIndex, 'title', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="Software Engineer"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Company</label>
+                              <input
+                                type="text"
+                                value={exp.company}
+                                onChange={(e) => updateExperience(expIndex, 'company', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="Tech Company"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                              <input
+                                type="text"
+                                value={exp.location}
+                                onChange={(e) => updateExperience(expIndex, 'location', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="San Francisco, CA"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Dates</label>
+                              <input
+                                type="text"
+                                value={exp.dates}
+                                onChange={(e) => updateExperience(expIndex, 'dates', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="June 2020 -- Present"
+                              />
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <div className="flex items-center justify-between mb-4">
+                              <label className="block text-sm font-medium text-gray-700">Responsibilities</label>
+                              <button
+                                onClick={() => addResponsibility(expIndex)}
+                                className="text-[#FF6542] hover:text-orange-600 transition-colors duration-300 flex items-center space-x-1"
+                              >
+                                <FaPlus className="text-sm" />
+                                <span className="text-sm">Add Point</span>
+                              </button>
+                            </div>
+                            {exp.responsibilities.map((resp, respIndex) => (
+                              <div key={respIndex} className="flex items-center space-x-2 mb-2">
+                                <textarea
+                                  value={resp}
+                                  onChange={(e) => updateExperienceResponsibility(expIndex, respIndex, e.target.value)}
+                                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
+                                  rows="2"
+                                  placeholder="Developed a REST API using FastAPI and PostgreSQL..."
+                                />
+                                {exp.responsibilities.length > 1 && (
+                                  <button
+                                    onClick={() => removeResponsibility(expIndex, respIndex)}
+                                    className="text-red-500 hover:text-red-700 transition-colors duration-300"
+                                  >
+                                    <FaTrash />
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Projects */}
+                  {activeTab === 'projects' && (
+                    <div>
+                      <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-bold text-[#2b2b2b] flex items-center">
+                          <FaCode className="mr-3 text-[#FF6542]" />
+                          Projects <span className="text-sm font-normal text-gray-500 ml-2">(Optional)</span>
+                        </h2>
+                        <button
+                          onClick={addProject}
+                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center space-x-2"
+                        >
+                          <FaPlus />
+                          <span>Add Project</span>
+                        </button>
+                      </div>
+                      
+                      {resumeData.projects.map((project, projIndex) => (
+                        <div key={projIndex} className="mb-8 p-6 border border-gray-200 rounded-lg">
+                          <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-[#2b2b2b]">Project {projIndex + 1}</h3>
+                            {resumeData.projects.length > 1 && (
+                              <button
+                                onClick={() => removeProject(projIndex)}
+                                className="text-red-500 hover:text-red-700 transition-colors duration-300"
+                              >
+                                <FaTrash />
+                              </button>
+                            )}
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Project Name</label>
+                              <input
+                                type="text"
+                                value={project.name}
+                                onChange={(e) => updateProject(projIndex, 'name', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="Gitlytics"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Technologies</label>
+                              <input
+                                type="text"
+                                value={project.technologies}
+                                onChange={(e) => updateProject(projIndex, 'technologies', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="Python, Flask, React, PostgreSQL, Docker"
+                              />
+                            </div>
+                            <div className="md:col-span-2">
+                              <label className="block text-sm font-medium text-gray-700 mb-2">Dates</label>
+                              <input
+                                type="text"
+                                value={project.dates}
+                                onChange={(e) => updateProject(projIndex, 'dates', e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                placeholder="June 2020 -- Present"
+                              />
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <div className="flex items-center justify-between mb-4">
+                              <label className="block text-sm font-medium text-gray-700">Project Description</label>
+                              <button
+                                onClick={() => addProjectDescription(projIndex)}
+                                className="text-[#FF6542] hover:text-orange-600 transition-colors duration-300 flex items-center space-x-1"
+                              >
+                                <FaPlus className="text-sm" />
+                                <span className="text-sm">Add Point</span>
+                              </button>
+                            </div>
+                            {project.description.map((desc, descIndex) => (
+                              <div key={descIndex} className="flex items-center space-x-2 mb-2">
+                                <textarea
+                                  value={desc}
+                                  onChange={(e) => updateProjectDescription(projIndex, descIndex, e.target.value)}
+                                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
+                                  rows="2"
+                                  placeholder="Developed a full-stack web application with Flask serving a REST API..."
+                                />
+                                {project.description.length > 1 && (
+                                  <button
+                                    onClick={() => removeProjectDescription(projIndex, descIndex)}
+                                    className="text-red-500 hover:text-red-700 transition-colors duration-300"
+                                  >
+                                    <FaTrash />
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Skills */}
+                  {activeTab === 'skills' && (
+                    <div>
+                      <h2 className="text-2xl font-bold text-[#2b2b2b] mb-6 flex items-center">
+                        <FaCode className="mr-3 text-[#FF6542]" />
+                        Technical Skills
+                      </h2>
+                      <div className="space-y-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Programming Languages *</label>
+                          <textarea
+                            value={resumeData.skills.languages}
+                            onChange={(e) => updateSkills('languages', e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
+                            rows="2"
+                            placeholder="Java, Python, C/C++, SQL (Postgres), JavaScript, HTML/CSS, R"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Frameworks *</label>
+                          <textarea
+                            value={resumeData.skills.frameworks}
+                            onChange={(e) => updateSkills('frameworks', e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
+                            rows="2"
+                            placeholder="React, Node.js, Flask, JUnit, WordPress, Material-UI, FastAPI"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Developer Tools *</label>
+                          <textarea
+                            value={resumeData.skills.developerTools}
+                            onChange={(e) => updateSkills('developerTools', e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
+                            rows="2"
+                            placeholder="Git, Docker, TravisCI, Google Cloud Platform, VS Code, Visual Studio, PyCharm, IntelliJ, Eclipse"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Libraries *</label>
+                          <textarea
+                            value={resumeData.skills.libraries}
+                            onChange={(e) => updateSkills('libraries', e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
+                            rows="2"
+                            placeholder="pandas, NumPy, Matplotlib"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : showPDFPreview ? (
+            // PDF Preview Section
+            <div className="max-w-6xl mx-auto">
+              <div className="bg-white rounded-2xl shadow-xl p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-[#2b2b2b]">PDF Preview</h2>
+                  <div className="flex space-x-4">
+                    <PDFDownloadLink
+                      document={<PDFPreview resumeData={resumeData} />}
+                      fileName={`${resumeData.personalInfo.name?.replace(/\s+/g, '_') || 'resume'}.pdf`}
+                      className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 flex items-center space-x-2"
+                    >
+                      {({ blob, url, loading, error }) => (
+                        <>
+                          <FaDownload />
+                          <span>{loading ? 'Generating...' : 'Download PDF'}</span>
+                        </>
+                      )}
+                    </PDFDownloadLink>
+                    <button
+                      onClick={() => {
+                        const latex = generateLatexCode(resumeData);
+                        setLatexCode(latex);
+                        setShowPDFPreview(false);
+                        setShowPreview(true);
+                      }}
+                      className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center space-x-2"
+                    >
+                      <FaCode />
+                      <span>View LaTeX</span>
+                    </button>
+                    <button
+                      onClick={() => setShowPDFPreview(false)}
+                      className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300"
+                    >
+                      Back to Edit
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="border rounded-lg overflow-hidden" style={{ height: '600px' }}>
+                  <PDFViewer width="100%" height="100%">
+                    <PDFPreview resumeData={resumeData} />
+                  </PDFViewer>
+                </div>
+                
+                <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h3 className="text-lg font-semibold text-blue-800 mb-2">PDF Options:</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="font-semibold text-blue-700 mb-2">Quick PDF (React-PDF)</h4>
+                      <p className="text-blue-600 text-sm mb-2">
+                        Download a basic PDF version immediately. Good for quick previews.
+                      </p>
+                      <PDFDownloadLink
+                        document={<PDFPreview resumeData={resumeData} />}
+                        fileName={`${resumeData.personalInfo.name?.replace(/\s+/g, '_') || 'resume'}_basic.pdf`}
+                        className="inline-block bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition-colors duration-300"
+                      >
+                        Download Basic PDF
+                      </PDFDownloadLink>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-blue-700 mb-2">Professional PDF (LaTeX)</h4>
+                      <p className="text-blue-600 text-sm mb-2">
+                        Compile LaTeX to get the exact Jake's template formatting.
+                      </p>
+                      <button
+                        onClick={generatePDFFromLatex}
+                        disabled={isGeneratingPDF}
+                        className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isGeneratingPDF ? 'Compiling...' : 'Compile LaTeX PDF'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            // Preview and Download Section
+            <div className="max-w-6xl mx-auto">
+              <div className="bg-white rounded-2xl shadow-xl p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-[#2b2b2b]">Generated LaTeX Code</h2>
+                  <div className="flex space-x-4">
+                    <button
+                      onClick={copyToClipboard}
+                      className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center space-x-2"
+                    >
+                      <FaCopy />
+                      <span>Copy LaTeX</span>
+                    </button>
+                    <button
+                      onClick={downloadLatex}
+                      className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 flex items-center space-x-2"
+                    >
+                      <FaDownload />
+                      <span>Download .tex</span>
+                    </button>
+                    <button
+                      onClick={generatePDFFromLatex}
+                      disabled={isGeneratingPDF}
+                      className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors duration-300 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FaFilePdf />
+                      <span>{isGeneratingPDF ? 'Compiling...' : 'Generate PDF'}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowPreview(false);
+                        setShowPDFPreview(true);
+                      }}
+                      className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors duration-300 flex items-center space-x-2"
+                    >
+                      <FaEye />
+                      <span>PDF Preview</span>
+                    </button>
+                    <button
+                      onClick={() => setShowPreview(false)}
+                      className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300"
+                    >
+                      Back to Edit
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 rounded-lg p-6 border">
+                  <pre className="text-sm text-gray-800 whitespace-pre-wrap overflow-x-auto max-h-96 overflow-y-auto">
+                    {latexCode}
+                  </pre>
+                </div>
+                
+                <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h3 className="text-lg font-semibold text-blue-800 mb-2">Download Options:</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-blue-700">
+                    <div>
+                      <h4 className="font-semibold mb-2">🚀 Quick Options:</h4>
+                      <ul className="list-disc list-inside text-sm space-y-1">
+                        <li>Click "Generate PDF" to compile LaTeX directly</li>
+                        <li>Click "PDF Preview" for immediate visual preview</li>
+                        <li>Copy/Download LaTeX code for manual compilation</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-2">📝 Manual Compilation:</h4>
+                      <ul className="list-disc list-inside text-sm space-y-1">
+                        <li>Copy LaTeX code and paste into <a href="https://www.overleaf.com" target="_blank" rel="noopener noreferrer" className="underline">Overleaf</a></li>
+                        <li>Use any LaTeX editor (TeXworks, TeXmaker, etc.)</li>
+                        <li>Compile with pdflatex for best results</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Features */}
+        <div className="mt-16 max-w-6xl w-full">
+          <h2 className="text-3xl font-bold text-center text-[#2b2b2b] mb-12">
+            What We Offer
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center p-6 bg-white rounded-xl shadow-lg">
+              <FaCode className="text-3xl text-[#FF6542] mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-[#2b2b2b] mb-2">Jake's Template</h3>
+              <p className="text-gray-600 text-sm">Generate exact LaTeX code from the proven Jake's Resume Template</p>
+            </div>
+            <div className="text-center p-6 bg-white rounded-xl shadow-lg">
+              <FaFilePdf className="text-3xl text-[#FF6542] mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-[#2b2b2b] mb-2">Instant PDF</h3>
+              <p className="text-gray-600 text-sm">Download PDF directly or compile LaTeX online automatically</p>
+            </div>
+            <div className="text-center p-6 bg-white rounded-xl shadow-lg">
+              <FaEye className="text-3xl text-[#FF6542] mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-[#2b2b2b] mb-2">Live Preview</h3>
+              <p className="text-gray-600 text-sm">See how your resume looks with real-time PDF preview</p>
+            </div>
+            <div className="text-center p-6 bg-white rounded-xl shadow-lg">
+              <FaMagic className="text-3xl text-[#FF6542] mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-[#2b2b2b] mb-2">Smart Sections</h3>
+              <p className="text-gray-600 text-sm">Projects and Experience are optional - perfect for students</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ResumeGenerator;

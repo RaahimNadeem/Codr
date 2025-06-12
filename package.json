@@ -12,6 +12,7 @@
   "dependencies": {
     "@mui/material": "^6.4.3",
     "@mui/x-data-grid": "^7.26.0",
+    "@react-pdf/renderer": "^4.3.0",
     "@studio-freight/lenis": "^1.0.42",
     "@tailwindcss/vite": "^4.0.5",
     "@tanstack/react-table": "^8.20.6",
@@ -19,14 +20,18 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.4.2",
     "gsap": "^3.12.7",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
     "lenis": "^1.1.20",
     "lucide-react": "^0.475.0",
     "material-react-table": "^3.1.0",
     "mui": "^0.0.1",
+    "pdfjs-dist": "^5.3.31",
+    "pdfkit": "^0.17.1",
     "react": "^19.0.0",
     "react-data-table-component": "^7.6.2",
     "react-dom": "^19.0.0",
-    "react-icons": "^5.4.0",
+    "react-icons": "^5.5.0",
     "react-router-dom": "^7.1.5",
     "react-use": "^17.6.0",
     "styled-components": "^6.1.15",
@@ -43,5 +48,6 @@
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^15.14.0",
     "vite": "^6.1.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

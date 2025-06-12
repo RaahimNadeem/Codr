@@ -1,0 +1,218 @@
+import React from 'react';
+import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
+
+// Define styles for the PDF
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#FFFFFF',
+    padding: 30,
+    fontSize: 11,
+    fontFamily: 'Times-Roman',
+  },
+  header: {
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  name: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  contactInfo: {
+    fontSize: 10,
+    marginBottom: 3,
+  },
+  section: {
+    marginBottom: 15,
+  },
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    borderBottomWidth: 1,
+    borderBottomColor: '#000000',
+    paddingBottom: 2,
+    marginBottom: 8,
+    textTransform: 'uppercase',
+  },
+  subsection: {
+    marginBottom: 8,
+  },
+  jobTitle: {
+    fontSize: 11,
+    fontWeight: 'bold',
+  },
+  company: {
+    fontSize: 10,
+    fontStyle: 'italic',
+  },
+  dates: {
+    fontSize: 10,
+    fontStyle: 'italic',
+    textAlign: 'right',
+  },
+  location: {
+    fontSize: 10,
+    fontStyle: 'italic',
+    textAlign: 'right',
+  },
+  bulletPoint: {
+    fontSize: 10,
+    marginBottom: 3,
+    marginLeft: 15,
+  },
+  skillCategory: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    marginBottom: 3,
+  },
+  skillList: {
+    fontSize: 10,
+    marginBottom: 5,
+    marginLeft: 10,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+});
+
+const PDFPreview = ({ resumeData }) => {
+  const { personalInfo, education, experience, projects, skills } = resumeData;
+
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.name}>{personalInfo.name || 'Your Name'}</Text>
+          <Text style={styles.contactInfo}>
+            {personalInfo.phone && personalInfo.email 
+              ? `${personalInfo.phone} | ${personalInfo.email}`
+              : personalInfo.phone || personalInfo.email || 'Contact Information'}
+          </Text>
+          {(personalInfo.linkedin || personalInfo.github || personalInfo.website) && (
+            <Text style={styles.contactInfo}>
+              {[personalInfo.linkedin, personalInfo.github, personalInfo.website]
+                .filter(Boolean)
+                .map(url => url.replace(/^https?:\/\//, ''))
+                .join(' | ')}
+            </Text>
+          )}
+        </View>
+
+        {/* Education */}
+        {education && education.some(edu => edu.institution) && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Education</Text>
+            {education.map((edu, index) => {
+              if (!edu.institution) return null;
+              return (
+                <View key={index} style={styles.subsection}>
+                  <View style={styles.row}>
+                    <Text style={styles.jobTitle}>{edu.institution}</Text>
+                    <Text style={styles.dates}>{edu.location}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.company}>
+                      {edu.degree}
+                      {edu.gpa && `, GPA: ${edu.gpa}`}
+                      {edu.honors && `, ${edu.honors}`}
+                    </Text>
+                    <Text style={styles.location}>{edu.dates}</Text>
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Experience */}
+        {experience && experience.some(exp => exp.title && exp.company) && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Experience</Text>
+            {experience.map((exp, index) => {
+              if (!exp.title || !exp.company) return null;
+              return (
+                <View key={index} style={styles.subsection}>
+                  <View style={styles.row}>
+                    <Text style={styles.jobTitle}>{exp.title}</Text>
+                    <Text style={styles.dates}>{exp.dates}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.company}>{exp.company}</Text>
+                    <Text style={styles.location}>{exp.location}</Text>
+                  </View>
+                  {exp.responsibilities && exp.responsibilities.filter(resp => resp.trim()).map((resp, respIndex) => (
+                    <Text key={respIndex} style={styles.bulletPoint}>
+                      • {resp.trim()}
+                    </Text>
+                  ))}
+                </View>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Projects */}
+        {projects && projects.some(proj => proj.name) && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Projects</Text>
+            {projects.map((project, index) => {
+              if (!project.name) return null;
+              return (
+                <View key={index} style={styles.subsection}>
+                  <View style={styles.row}>
+                    <Text style={styles.jobTitle}>
+                      {project.name} | {project.technologies}
+                    </Text>
+                    <Text style={styles.dates}>{project.dates}</Text>
+                  </View>
+                  {project.description && project.description.filter(desc => desc.trim()).map((desc, descIndex) => (
+                    <Text key={descIndex} style={styles.bulletPoint}>
+                      • {desc.trim()}
+                    </Text>
+                  ))}
+                </View>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Technical Skills */}
+        {skills && (skills.languages || skills.frameworks || skills.developerTools || skills.libraries) && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Technical Skills</Text>
+            {skills.languages && (
+              <View style={styles.subsection}>
+                <Text style={styles.skillCategory}>Languages: </Text>
+                <Text style={styles.skillList}>{skills.languages}</Text>
+              </View>
+            )}
+            {skills.frameworks && (
+              <View style={styles.subsection}>
+                <Text style={styles.skillCategory}>Frameworks: </Text>
+                <Text style={styles.skillList}>{skills.frameworks}</Text>
+              </View>
+            )}
+            {skills.developerTools && (
+              <View style={styles.subsection}>
+                <Text style={styles.skillCategory}>Developer Tools: </Text>
+                <Text style={styles.skillList}>{skills.developerTools}</Text>
+              </View>
+            )}
+            {skills.libraries && (
+              <View style={styles.subsection}>
+                <Text style={styles.skillCategory}>Libraries: </Text>
+                <Text style={styles.skillList}>{skills.libraries}</Text>
+              </View>
+            )}
+          </View>
+        )}
+      </Page>
+    </Document>
+  );
+};
+
+export default PDFPreview;

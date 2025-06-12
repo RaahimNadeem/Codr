@@ -16,7 +16,10 @@ const Hero = () => {
                 guide for navigating the sometimes overwhelming world after
                 graduation.
               </div>
-
+              
+             
+              
+          
               {/* Poem*/}
               <div className="hidden 2xl:flex mt-10 lg:mt-20 xl:mt-20 w-1/4 text-grey-700 text-xs font-mono opacity-50">
                 <p>
@@ -29,8 +32,8 @@ const Hero = () => {
               </div>
 
               {/* Contact Information for sm and larger screens - Bottom Left */}
-              <div className="hidden sm:flex absolute bottom-6 mt-10 sm:w-1/3 md:w-3/9 lg:w-3/8 justify-between text-xs font-mono uppercase xl:pl-48">
-                <div className="w-1/4 md:w-1/6 text-gray-700 text-left ">
+              <div className="hidden sm:flex absolute bottom-6 mt-10 sm:w-1/3 md:w-3/9 lg:w-3/8 justify-between text-xs font-mono uppercase">
+                <div className="w-1/4 md:w-1/4 text-gray-700 text-left ">
                   <p>GOT QUESTIONS? I'M HERE TO HELP</p>
                 </div>
 

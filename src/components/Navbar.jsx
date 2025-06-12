@@ -8,6 +8,7 @@ const navItems = [
   { name: "Tips & Prep", path: "/tips-prep" },
   { name: "Resources", path: "/resources" },
   { name: "Companies", path: "/companies" },
+  { name: "Resume Generator", path: "/resume-generator" },
 ];
 
 const NavBar = () => {
