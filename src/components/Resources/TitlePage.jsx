@@ -17,9 +17,7 @@ const TitlePage = () => {
             When I was navigating this journey, I wish I had a clearer map of
             resources to guide me. That’s why I’m sharing these tools and
             resources with you—so you don’t have to go through the same
-            struggles I did. If they help you even a fraction as much as they
-            helped me, then they’re doing their job. Take advantage of them and
-            build your foundation!{" "}
+            struggles I did.{" "}
           </div>
 
           {/* Scroll Down Indication */}
