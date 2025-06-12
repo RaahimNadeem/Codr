@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaUser, FaGraduationCap, FaBriefcase, FaCode, FaDownload, FaCopy, FaPlus, FaTrash, FaEye, FaFilePdf, FaMagic } from 'react-icons/fa';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { generateLatexCode } from './latexGenerator';
 import PDFPreview from './PDFPreview';
 import { PDFService } from './pdfService';
 import { sampleResumeData } from './sampleData';
+import ResumeGeneratorTitlePage from './ResumeGeneratorTitlePage';
 
 const ResumeGenerator = () => {
   const [resumeData, setResumeData] = useState({
@@ -56,6 +57,11 @@ const ResumeGenerator = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [showPDFPreview, setShowPDFPreview] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  useEffect(() => {
+    // Scroll to top of the page when the component is mounted
+    window.scrollTo(0, 0);
+  }, []);
 
   const updatePersonalInfo = (field, value) => {
     setResumeData(prev => ({
@@ -295,32 +301,23 @@ const ResumeGenerator = () => {
   ];
 
   return (
-    <div className="relative min-h-screen w-screen overflow-x-hidden bg-[#F4F2ED]">
-      <div className="relative z-10 min-h-screen w-screen px-5 py-24">
+    <main className="relative bg-[#F4F2ED] min-h-screen w-screen overflow-x-hidden">
+      <ResumeGeneratorTitlePage />
+      
+      <div className="-mt-36 relative w-screen rounded-t-4xl flex flex-col bg-[#2b2b2b] p-10 overflow-hidden text-white">
         
-        {/* Header */}
-        <div className="text-center mb-12 max-w-6xl mx-auto">
-          <h1 className="text-6xl lg:text-8xl font-bold text-[#FF6542] hover:text-[#2b2b2b] transition-colors duration-700 mb-6">
-            Resume Generator
-          </h1>
-          <p className="text-lg lg:text-xl text-[#2b2b2b] leading-relaxed">
-            Create a professional, ATS-friendly resume using Jake's proven LaTeX template. 
-            Fill in your details and generate ready-to-use LaTeX code or download as PDF.
+        {/* Load Sample Data Section */}
+        <div className="text-center mb-12 max-w-4xl mx-auto mt-12">
+          <button
+            onClick={loadSampleData}
+            className="bg-[#FF6542] text-white px-8 py-4 rounded-xl hover:bg-orange-600 transition-colors duration-300 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center space-x-3 mx-auto"
+          >
+            <FaMagic className="text-xl" />
+            <span>Load Sample Data</span>
+          </button>
+          <p className="text-gray-300 mt-4 text-lg">
+            See Jake's original resume as an example and customize it for yourself
           </p>
-          
-          {/* Load Sample Data Button */}
-          <div className="mt-6">
-            <button
-              onClick={loadSampleData}
-              className="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition-colors duration-300 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center space-x-2"
-            >
-              <FaMagic />
-              <span>Load Sample Data</span>
-            </button>
-            <p className="text-sm text-gray-600 mt-2">
-              See Jake's original resume as an example and customize it for yourself
-            </p>
-          </div>
         </div>
 
         <div className="max-w-7xl mx-auto">
@@ -329,8 +326,8 @@ const ResumeGenerator = () => {
               
               {/* Sidebar Navigation */}
               <div className="lg:col-span-1">
-                <div className="bg-white rounded-2xl shadow-xl p-6 sticky top-24">
-                  <h3 className="text-xl font-bold text-[#2b2b2b] mb-6">Resume Sections</h3>
+                <div className="bg-[#333] rounded-2xl shadow-xl p-6 sticky top-24">
+                  <h3 className="text-xl font-bold text-white mb-6">Resume Sections</h3>
                   <nav className="space-y-2">
                     {tabs.map((tab) => {
                       const Icon = tab.icon;
@@ -341,7 +338,7 @@ const ResumeGenerator = () => {
                           className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors duration-200 ${
                             activeTab === tab.id
                               ? 'bg-[#FF6542] text-white'
-                              : 'text-[#2b2b2b] hover:bg-gray-100'
+                              : 'text-gray-300 hover:bg-[#444]'
                           }`}
                         >
                           <Icon className="text-lg" />
@@ -354,7 +351,7 @@ const ResumeGenerator = () => {
                   <div className="mt-8">
                     <button
                       onClick={generateResume}
-                      className="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 flex items-center justify-center space-x-2 mb-4"
+                      className="w-full bg-[#FF6542] text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-300 flex items-center justify-center space-x-2 mb-4"
                     >
                       <FaEye />
                       <span>Generate Resume</span>
@@ -378,73 +375,73 @@ const ResumeGenerator = () => {
 
               {/* Main Content */}
               <div className="lg:col-span-3">
-                <div className="bg-white rounded-2xl shadow-xl p-8">
+                <div className="bg-[#333] rounded-2xl shadow-xl p-8">
                   
                   {/* Personal Information */}
                   {activeTab === 'personal' && (
                     <div>
-                      <h2 className="text-2xl font-bold text-[#2b2b2b] mb-6 flex items-center">
+                      <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
                         <FaUser className="mr-3 text-[#FF6542]" />
                         Personal Information
                       </h2>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
                           <input
                             type="text"
                             value={resumeData.personalInfo.name}
                             onChange={(e) => updatePersonalInfo('name', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="Jake Ryan"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Phone Number *</label>
                           <input
                             type="text"
                             value={resumeData.personalInfo.phone}
                             onChange={(e) => updatePersonalInfo('phone', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="123-456-7890"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Email Address *</label>
                           <input
                             type="email"
                             value={resumeData.personalInfo.email}
                             onChange={(e) => updatePersonalInfo('email', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="jake@su.edu"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">LinkedIn Profile</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">LinkedIn Profile</label>
                           <input
                             type="text"
                             value={resumeData.personalInfo.linkedin}
                             onChange={(e) => updatePersonalInfo('linkedin', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="linkedin.com/in/jake"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">GitHub Profile</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">GitHub Profile</label>
                           <input
                             type="text"
                             value={resumeData.personalInfo.github}
                             onChange={(e) => updatePersonalInfo('github', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="github.com/jake"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Personal Website</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Personal Website</label>
                           <input
                             type="text"
                             value={resumeData.personalInfo.website}
                             onChange={(e) => updatePersonalInfo('website', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="www.jake.com"
                           />
                         </div>
@@ -456,7 +453,7 @@ const ResumeGenerator = () => {
                   {activeTab === 'education' && (
                     <div>
                       <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-[#2b2b2b] flex items-center">
+                        <h2 className="text-2xl font-bold text-white flex items-center">
                           <FaGraduationCap className="mr-3 text-[#FF6542]" />
                           Education
                         </h2>
@@ -472,7 +469,7 @@ const ResumeGenerator = () => {
                       {resumeData.education.map((edu, index) => (
                         <div key={index} className="mb-8 p-6 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-semibold text-[#2b2b2b]">Education {index + 1}</h3>
+                            <h3 className="text-lg font-semibold text-white">Education {index + 1}</h3>
                             {resumeData.education.length > 1 && (
                               <button
                                 onClick={() => removeEducation(index)}
@@ -484,62 +481,62 @@ const ResumeGenerator = () => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Institution *</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Institution *</label>
                               <input
                                 type="text"
                                 value={edu.institution}
                                 onChange={(e) => updateEducation(index, 'institution', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Southwestern University"
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Location *</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Location *</label>
                               <input
                                 type="text"
                                 value={edu.location}
                                 onChange={(e) => updateEducation(index, 'location', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Georgetown, TX"
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Degree *</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Degree *</label>
                               <input
                                 type="text"
                                 value={edu.degree}
                                 onChange={(e) => updateEducation(index, 'degree', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Bachelor of Arts in Computer Science, Minor in Business"
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Dates *</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Dates *</label>
                               <input
                                 type="text"
                                 value={edu.dates}
                                 onChange={(e) => updateEducation(index, 'dates', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Aug. 2018 -- May 2021"
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">GPA (Optional)</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">GPA (Optional)</label>
                               <input
                                 type="text"
                                 value={edu.gpa}
                                 onChange={(e) => updateEducation(index, 'gpa', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="3.85/4.0"
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Honors/Awards (Optional)</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Honors/Awards (Optional)</label>
                               <input
                                 type="text"
                                 value={edu.honors}
                                 onChange={(e) => updateEducation(index, 'honors', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Cum Laude, Dean's List"
                               />
                             </div>
@@ -553,7 +550,7 @@ const ResumeGenerator = () => {
                   {activeTab === 'experience' && (
                     <div>
                       <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-[#2b2b2b] flex items-center">
+                        <h2 className="text-2xl font-bold text-white flex items-center">
                           <FaBriefcase className="mr-3 text-[#FF6542]" />
                           Experience <span className="text-sm font-normal text-gray-500 ml-2">(Optional)</span>
                         </h2>
@@ -569,7 +566,7 @@ const ResumeGenerator = () => {
                       {resumeData.experience.map((exp, expIndex) => (
                         <div key={expIndex} className="mb-8 p-6 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-semibold text-[#2b2b2b]">Experience {expIndex + 1}</h3>
+                            <h3 className="text-lg font-semibold text-white">Experience {expIndex + 1}</h3>
                             {resumeData.experience.length > 1 && (
                               <button
                                 onClick={() => removeExperience(expIndex)}
@@ -581,42 +578,42 @@ const ResumeGenerator = () => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Job Title</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Job Title</label>
                               <input
                                 type="text"
                                 value={exp.title}
                                 onChange={(e) => updateExperience(expIndex, 'title', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Software Engineer"
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Company</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Company</label>
                               <input
                                 type="text"
                                 value={exp.company}
                                 onChange={(e) => updateExperience(expIndex, 'company', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Tech Company"
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Location</label>
                               <input
                                 type="text"
                                 value={exp.location}
                                 onChange={(e) => updateExperience(expIndex, 'location', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="San Francisco, CA"
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Dates</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Dates</label>
                               <input
                                 type="text"
                                 value={exp.dates}
                                 onChange={(e) => updateExperience(expIndex, 'dates', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="June 2020 -- Present"
                               />
                             </div>
@@ -662,7 +659,7 @@ const ResumeGenerator = () => {
                   {activeTab === 'projects' && (
                     <div>
                       <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-[#2b2b2b] flex items-center">
+                        <h2 className="text-2xl font-bold text-white flex items-center">
                           <FaCode className="mr-3 text-[#FF6542]" />
                           Projects <span className="text-sm font-normal text-gray-500 ml-2">(Optional)</span>
                         </h2>
@@ -678,7 +675,7 @@ const ResumeGenerator = () => {
                       {resumeData.projects.map((project, projIndex) => (
                         <div key={projIndex} className="mb-8 p-6 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-semibold text-[#2b2b2b]">Project {projIndex + 1}</h3>
+                            <h3 className="text-lg font-semibold text-white">Project {projIndex + 1}</h3>
                             {resumeData.projects.length > 1 && (
                               <button
                                 onClick={() => removeProject(projIndex)}
@@ -690,32 +687,32 @@ const ResumeGenerator = () => {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Project Name</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Project Name</label>
                               <input
                                 type="text"
                                 value={project.name}
                                 onChange={(e) => updateProject(projIndex, 'name', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Gitlytics"
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Technologies</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Technologies</label>
                               <input
                                 type="text"
                                 value={project.technologies}
                                 onChange={(e) => updateProject(projIndex, 'technologies', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Python, Flask, React, PostgreSQL, Docker"
                               />
                             </div>
                             <div className="md:col-span-2">
-                              <label className="block text-sm font-medium text-gray-700 mb-2">Dates</label>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Dates</label>
                               <input
                                 type="text"
                                 value={project.dates}
                                 onChange={(e) => updateProject(projIndex, 'dates', e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent"
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="June 2020 -- Present"
                               />
                             </div>
@@ -760,47 +757,47 @@ const ResumeGenerator = () => {
                   {/* Skills */}
                   {activeTab === 'skills' && (
                     <div>
-                      <h2 className="text-2xl font-bold text-[#2b2b2b] mb-6 flex items-center">
+                      <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
                         <FaCode className="mr-3 text-[#FF6542]" />
                         Technical Skills
                       </h2>
                       <div className="space-y-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Programming Languages *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Programming Languages *</label>
                           <textarea
                             value={resumeData.skills.languages}
                             onChange={(e) => updateSkills('languages', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
                             placeholder="Java, Python, C/C++, SQL (Postgres), JavaScript, HTML/CSS, R"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Frameworks *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Frameworks *</label>
                           <textarea
                             value={resumeData.skills.frameworks}
                             onChange={(e) => updateSkills('frameworks', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
                             placeholder="React, Node.js, Flask, JUnit, WordPress, Material-UI, FastAPI"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Developer Tools *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Developer Tools *</label>
                           <textarea
                             value={resumeData.skills.developerTools}
                             onChange={(e) => updateSkills('developerTools', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
                             placeholder="Git, Docker, TravisCI, Google Cloud Platform, VS Code, Visual Studio, PyCharm, IntelliJ, Eclipse"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Libraries *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Libraries *</label>
                           <textarea
                             value={resumeData.skills.libraries}
                             onChange={(e) => updateSkills('libraries', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
                             placeholder="pandas, NumPy, Matplotlib"
                           />
@@ -816,7 +813,7 @@ const ResumeGenerator = () => {
             <div className="max-w-6xl mx-auto">
               <div className="bg-white rounded-2xl shadow-xl p-8">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-[#2b2b2b]">PDF Preview</h2>
+                  <h2 className="text-2xl font-bold text-white">PDF Preview</h2>
                   <div className="flex space-x-4">
                     <PDFDownloadLink
                       document={<PDFPreview resumeData={resumeData} />}
@@ -895,7 +892,7 @@ const ResumeGenerator = () => {
             <div className="max-w-6xl mx-auto">
               <div className="bg-white rounded-2xl shadow-xl p-8">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-[#2b2b2b]">Generated LaTeX Code</h2>
+                  <h2 className="text-2xl font-bold text-white">Generated LaTeX Code</h2>
                   <div className="flex space-x-4">
                     <button
                       onClick={copyToClipboard}
@@ -971,35 +968,35 @@ const ResumeGenerator = () => {
         </div>
 
         {/* Features */}
-        <div className="mt-16 max-w-6xl w-full">
-          <h2 className="text-3xl font-bold text-center text-[#2b2b2b] mb-12">
+        {/* <div className="mt-16 max-w-6xl w-full">
+          <h2 className="text-3xl font-bold text-center text-white mb-12">
             What We Offer
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center p-6 bg-white rounded-xl shadow-lg">
               <FaCode className="text-3xl text-[#FF6542] mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-[#2b2b2b] mb-2">Jake's Template</h3>
+              <h3 className="text-lg font-semibold text-white mb-2">Jake's Template</h3>
               <p className="text-gray-600 text-sm">Generate exact LaTeX code from the proven Jake's Resume Template</p>
             </div>
             <div className="text-center p-6 bg-white rounded-xl shadow-lg">
               <FaFilePdf className="text-3xl text-[#FF6542] mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-[#2b2b2b] mb-2">Instant PDF</h3>
+              <h3 className="text-lg font-semibold text-white mb-2">Instant PDF</h3>
               <p className="text-gray-600 text-sm">Download PDF directly or compile LaTeX online automatically</p>
             </div>
             <div className="text-center p-6 bg-white rounded-xl shadow-lg">
               <FaEye className="text-3xl text-[#FF6542] mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-[#2b2b2b] mb-2">Live Preview</h3>
+              <h3 className="text-lg font-semibold text-white mb-2">Live Preview</h3>
               <p className="text-gray-600 text-sm">See how your resume looks with real-time PDF preview</p>
             </div>
             <div className="text-center p-6 bg-white rounded-xl shadow-lg">
               <FaMagic className="text-3xl text-[#FF6542] mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-[#2b2b2b] mb-2">Smart Sections</h3>
+              <h3 className="text-lg font-semibold text-white mb-2">Smart Sections</h3>
               <p className="text-gray-600 text-sm">Projects and Experience are optional - perfect for students</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
-    </div>
+    </main>
   );
 };
 
