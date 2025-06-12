@@ -1,97 +1,80 @@
 // Sample resume data for testing the generator
 export const sampleResumeData = {
   personalInfo: {
-    name: 'Jake Ryan',
-    phone: '123-456-7890',
-    email: 'jake@su.edu',
-    linkedin: 'linkedin.com/in/jake',
-    github: 'github.com/jake',
+    name: 'Raahim Nadeem',
+    phone: '0336-7450450',
+    email: 'raahim.nade@gmail.com',
+    linkedin: 'linkedin.com/in/raahim-nadeem',
+    github: 'github.com/RaahimNadeem',
     website: ''
   },
   education: [
     {
-      institution: 'Southwestern University',
-      location: 'Georgetown, TX',
-      degree: 'Bachelor of Arts in Computer Science, Minor in Business',
-      dates: 'Aug. 2018 -- May 2021',
+      institution: 'Lahore University of Management Sciences (LUMS)', 
+      location: 'Lahore, Pakistan',
+      degree: 'Bachelor of Science in Computer Science',
+      dates: '2020 — 2024',
       gpa: '',
       honors: ''
     },
-    {
-      institution: 'Blinn College',
-      location: 'Bryan, TX',
-      degree: 'Associate\'s in Liberal Arts',
-      dates: 'Aug. 2014 -- May 2018',
-      gpa: '',
-      honors: ''
-    }
+    
   ],
   experience: [
     {
-      title: 'Undergraduate Research Assistant',
-      company: 'Texas A&M University',
-      location: 'College Station, TX',
-      dates: 'June 2020 -- Present',
+      title: 'Software Engineer I',
+      company: 'Careem',
+      location: 'Lahore, PK',
+      dates: 'April 2025 — Present',
       responsibilities: [
-        'Developed a REST API using FastAPI and PostgreSQL to store data from learning management systems',
-        'Developed a full-stack web application using Flask, React, PostgreSQL and Docker to analyze GitHub data',
-        'Explored ways to visualize GitHub collaboration in a classroom setting'
+        'Migrated legacy codebase to a modern React 18 + Vite setup, significantly improving development speed and bundle efficiency for the internal portal.',
+        'Led the transition of the internal portal to a unified Super Portal, coordinating cross-functional teams.',
+        'Designed and developed a microservices-based backend using Go, gRPC with Protocol Buffers, and SQL, incorporating robust logging, structured error handling, and production-grade monitoring.',
+        "Spearheaded curriculum design and delivery for an internal AI-in-Software Development course as part of the company's Learning and Development (L&D) program, focusing on practical applications of AI in engineering workflows."
+    ]
+    },
+    {
+      title: 'Software Engineer',
+      company: 'GoSaaS, Inc.',
+      location: 'Lahore, PK',
+      dates: 'June 2014 — April 2025',
+      responsibilities: [
+        'Designed workflows to reduce project timelines and maintain data integrity, minimizing disruptions during the migration and ensuring a smooth transition to the new system.',
+        'Contributed in data migration for company’s biggest client to date, extracting, transforming, and loading (ETL) of 6 million rows of data into their new Oracle AGILE PLM system.',
+        'Designed and developed a reporting micro-service to unify reporting workflows across multiple products, enabling better decision-making for leadership teams.'
       ]
     },
     {
-      title: 'Information Technology Support Specialist',
-      company: 'Southwestern University',
-      location: 'Georgetown, TX',
-      dates: 'Sep. 2018 -- Present',
+      title: 'Developer',
+      company: 'Python',
+      location: 'Remote',
+      dates: 'May 2023 — Feb 2024',
       responsibilities: [
-        'Communicate with managers to set up campus computers used on campus',
-        'Assess and troubleshoot computer problems brought by students, faculty and staff',
-        'Maintain upkeep of computers, classroom equipment, and 200 printers across campus'
-      ]
-    },
-    {
-      title: 'Artificial Intelligence Research Assistant',
-      company: 'Southwestern University',
-      location: 'Georgetown, TX',
-      dates: 'May 2019 -- July 2019',
-      responsibilities: [
-        'Explored methods to generate video game dungeons based off of The Legend of Zelda',
-        'Developed a game in Java to test the generated dungeons',
-        'Contributed 50K+ lines of code to an established codebase via Git',
-        'Conducted a human subject study to determine which video game dungeon generation technique is enjoyable',
-        'Wrote an 8-page paper and gave multiple presentations on-campus',
-        'Presented virtually to the World Conference on Computational Intelligence'
+        'Created a comprehensive coding resource library with 800+ solutions across multiple programming languages, enhancing problem-solving efficiency for a global developer community.',
+        'Contributed to a high-profile Google-commissioned project, refining algorithms and validating test cases for the training of Google’s Bard AI model.'
       ]
     }
   ],
   projects: [
     {
-      name: 'Gitlytics',
-      technologies: 'Python, Flask, React, PostgreSQL, Docker',
-      dates: 'June 2020 -- Present',
+      name: 'Guftugu AI - Global SaaS Dialogue',
+      technologies: 'Next.js, Typescript, OpenAI API, Tailwind CSS, Firebase, Shadcn',
       description: [
-        'Developed a full-stack web application using with Flask serving a REST API with React as the frontend',
-        'Implemented GitHub OAuth to get data from user\'s repositories',
-        'Visualized GitHub data to show collaboration',
-        'Used Celery and Redis for asynchronous tasks'
-      ]
+        'Engineered a highly responsive and interactive platform using Next JS.',
+        'Designed an intuitive UI with Shadcn and leveraged Firebase v9 for robust data synchronization and cloud services.'
+    ]
     },
     {
-      name: 'Simple Paintball',
-      technologies: 'Spigot API, Java, Maven, TravisCI, Git',
-      dates: 'May 2018 -- May 2020',
+      name: 'ML-based Forest Fire Prediction',
+      technologies: 'Python, Torch, scikit-learn, TensorFlow',
       description: [
-        'Developed a Minecraft server plugin to entertain kids during free time for a previous job',
-        'Published plugin to websites gaining 2K+ downloads and an average 4.5/5-star review',
-        'Implemented continuous delivery using TravisCI to build the plugin upon new a release',
-        'Collaborated with Minecraft server administrators to suggest features and get feedback about the plugin'
+        'Developed state-of-the-art image segmentation pipelines using UNet, ClipSeg, Segformer, SAM.',
+        'Engineered a robust ML model employing NVIDIA’s XGBoost and TensorFlow, resulting in a 93.13% prediction accuracy rate.',
       ]
     }
   ],
   skills: {
-    languages: 'Java, Python, C/C++, SQL (Postgres), JavaScript, HTML/CSS, R',
-    frameworks: 'React, Node.js, Flask, JUnit, WordPress, Material-UI, FastAPI',
-    developerTools: 'Git, Docker, TravisCI, Google Cloud Platform, VS Code, Visual Studio, PyCharm, IntelliJ, Eclipse',
-    libraries: 'pandas, NumPy, Matplotlib'
+    languages: 'Java, Python, C/C++, SQL (PostgreSQL, MySQL, OracleSQL), JavaScript, Go, Haskell, HTML/CSS',
+    frameworks: 'React.js, Next.js, Tailwind CSS, Node.js, Express.js, BullMQ, Mantine, MUI, FastAPI, MongoDB, Knex.js',
+    developerTools: 'Git, Docker, Google Cloud Platform, VS Code, Visual Studio, PyCharm, IntelliJ, Eclipse',
   }
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaGraduationCap, FaBriefcase, FaCode, FaDownload, FaCopy, FaPlus, FaTrash, FaEye, FaFilePdf, FaMagic } from 'react-icons/fa';
+import { FaUser, FaGraduationCap, FaBriefcase, FaCode, FaDownload, FaCopy, FaPlus, FaTrash, FaEye, FaFilePdf, FaMagic, FaCertificate } from 'react-icons/fa';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import { generateLatexCode } from './latexGenerator';
 import PDFPreview from './PDFPreview';
@@ -49,7 +49,15 @@ const ResumeGenerator = () => {
       frameworks: '',
       developerTools: '',
       libraries: ''
-    }
+    },
+    certifications: [
+      {
+        name: '',
+        issuer: '',
+        date: '',
+        credentialId: ''
+      }
+    ]
   });
 
   const [activeTab, setActiveTab] = useState('personal');
@@ -289,21 +297,37 @@ const ResumeGenerator = () => {
 
   const loadSampleData = () => {
     setResumeData(sampleResumeData);
-    alert('Sample data loaded! You can now see how Jake\'s resume looks and modify it.');
+    toast.success("Sample data loaded! You can now see Jake's resume and modify it.", {
+      style: {
+        background: '#222',
+        color: '#fff',
+        fontSize: '1rem',
+        borderRadius: '0.75rem',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.12)'
+      },
+      iconTheme: {
+        primary: '#FF6542',
+        secondary: '#fff',
+      },
+      duration: 2500
+    });
   };
 
   const tabs = [
     { id: 'personal', label: 'Personal Info', icon: FaUser },
     { id: 'education', label: 'Education', icon: FaGraduationCap },
-    { id: 'experience', label: 'Experience', icon: FaBriefcase },
-    { id: 'projects', label: 'Projects', icon: FaCode },
-    { id: 'skills', label: 'Skills', icon: FaCode }
+    { id: 'experience', label: 'Experience', icon: FaBriefcase, optional: true },
+    { id: 'projects', label: 'Projects', icon: FaCode, optional: true },
+    { id: 'skills', label: 'Skills', icon: FaCode, optional: true },
+    { id: 'certifications', label: 'Certifications', icon: FaCertificate, optional: true }
   ];
 
   return (
     <main className="relative bg-[#F4F2ED] min-h-screen w-screen overflow-x-hidden">
       <ResumeGeneratorTitlePage />
-      
+
+      {/* Resume Tips Section */}
+     
       <div className="-mt-36 relative w-screen rounded-t-4xl flex flex-col bg-[#2b2b2b] p-10 overflow-hidden text-white">
         
         {/* Load Sample Data Section */}
@@ -354,7 +378,7 @@ const ResumeGenerator = () => {
                       className="w-full bg-[#FF6542] text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-300 flex items-center justify-center space-x-2 mb-4"
                     >
                       <FaEye />
-                      <span>Generate Resume</span>
+                      <span>Generate LaTeX Code</span>
                     </button>
                     
                     {/* Quick Preview Button */}
@@ -763,7 +787,7 @@ const ResumeGenerator = () => {
                       </h2>
                       <div className="space-y-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Programming Languages *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Programming Languages</label>
                           <textarea
                             value={resumeData.skills.languages}
                             onChange={(e) => updateSkills('languages', e.target.value)}
@@ -773,7 +797,7 @@ const ResumeGenerator = () => {
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Frameworks *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Frameworks</label>
                           <textarea
                             value={resumeData.skills.frameworks}
                             onChange={(e) => updateSkills('frameworks', e.target.value)}
@@ -783,7 +807,7 @@ const ResumeGenerator = () => {
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Developer Tools *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Developer Tools</label>
                           <textarea
                             value={resumeData.skills.developerTools}
                             onChange={(e) => updateSkills('developerTools', e.target.value)}
@@ -793,7 +817,7 @@ const ResumeGenerator = () => {
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Libraries *</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Libraries</label>
                           <textarea
                             value={resumeData.skills.libraries}
                             onChange={(e) => updateSkills('libraries', e.target.value)}
@@ -805,13 +829,110 @@ const ResumeGenerator = () => {
                       </div>
                     </div>
                   )}
+
+                  {/* Certifications */}
+                  {activeTab === 'certifications' && (
+                    <div>
+                      <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-bold text-white flex items-center">
+                          <FaCertificate className="mr-3 text-[#FF6542]" />
+                          Certifications <span className="text-sm font-normal text-gray-500 ml-2">(Optional)</span>
+                        </h2>
+                        <button
+                          onClick={() => setResumeData(prev => ({
+                            ...prev,
+                            certifications: [
+                              ...prev.certifications,
+                              { name: '', issuer: '', date: '', credentialId: '' }
+                            ]
+                          }))}
+                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center space-x-2"
+                        >
+                          <FaPlus />
+                          <span>Add Certification</span>
+                        </button>
+                      </div>
+                      {resumeData.certifications.map((cert, certIndex) => (
+                        <div key={certIndex} className="mb-8 p-6 border border-gray-200 rounded-lg">
+                          <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-white">Certification {certIndex + 1}</h3>
+                            {resumeData.certifications.length > 1 && (
+                              <button
+                                onClick={() => setResumeData(prev => ({
+                                  ...prev,
+                                  certifications: prev.certifications.filter((_, i) => i !== certIndex)
+                                }))}
+                                className="text-red-500 hover:text-red-700 transition-colors duration-300"
+                              >
+                                <FaTrash />
+                              </button>
+                            )}
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Certification Name</label>
+                              <input
+                                type="text"
+                                value={cert.name}
+                                onChange={e => setResumeData(prev => ({
+                                  ...prev,
+                                  certifications: prev.certifications.map((c, i) => i === certIndex ? { ...c, name: e.target.value } : c)
+                                }))}
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
+                                placeholder="AWS Certified Solutions Architect"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Issuer *</label>
+                              <input
+                                type="text"
+                                value={cert.issuer}
+                                onChange={e => setResumeData(prev => ({
+                                  ...prev,
+                                  certifications: prev.certifications.map((c, i) => i === certIndex ? { ...c, issuer: e.target.value } : c)
+                                }))}
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
+                                placeholder="Amazon Web Services"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Date</label>
+                              <input
+                                type="text"
+                                value={cert.date}
+                                onChange={e => setResumeData(prev => ({
+                                  ...prev,
+                                  certifications: prev.certifications.map((c, i) => i === certIndex ? { ...c, date: e.target.value } : c)
+                                }))}
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
+                                placeholder="June 2024"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Credential ID (if available)</label>
+                              <input
+                                type="text"
+                                value={cert.credentialId}
+                                onChange={e => setResumeData(prev => ({
+                                  ...prev,
+                                  certifications: prev.certifications.map((c, i) => i === certIndex ? { ...c, credentialId: e.target.value } : c)
+                                }))}
+                                className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
+                                placeholder="ABC-1234"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           ) : showPDFPreview ? (
             // PDF Preview Section
             <div className="max-w-6xl mx-auto">
-              <div className="bg-white rounded-2xl shadow-xl p-8">
+              <div className="bg-[#2b2b2b] rounded-2xl p-8">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-2xl font-bold text-white">PDF Preview</h2>
                   <div className="flex space-x-4">
@@ -908,20 +1029,20 @@ const ResumeGenerator = () => {
                       <FaDownload />
                       <span>Download .tex</span>
                     </button>
-                    <button
+                    {/* <button
                       onClick={generatePDFFromLatex}
                       disabled={isGeneratingPDF}
                       className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors duration-300 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <FaFilePdf />
                       <span>{isGeneratingPDF ? 'Compiling...' : 'Generate PDF'}</span>
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => {
                         setShowPreview(false);
                         setShowPDFPreview(true);
                       }}
-                      className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors duration-300 flex items-center space-x-2"
+                      className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors duration-300 flex items-center space-x-2"
                     >
                       <FaEye />
                       <span>PDF Preview</span>

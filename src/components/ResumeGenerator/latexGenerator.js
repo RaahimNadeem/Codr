@@ -21,9 +21,14 @@ export const generateLatexCode = (resumeData) => {
   // Helper function to format URLs
   const formatUrl = (url) => {
     if (!url) return '';
-    // Remove protocol if present for display
-    const displayUrl = url.replace(/^https?:\/\//, '');
-    return `\\href{https://${displayUrl.startsWith('www.') ? '' : 'www.'}${displayUrl}}{\\underline{${displayUrl}}}`;
+    let href = url.trim();
+    // Add https:// if not present
+    if (!/^https?:\/\//i.test(href)) {
+      href = 'https://' + href;
+    }
+    // Display text: remove protocol for cleaner look
+    const displayUrl = href.replace(/^https?:\/\//i, '');
+    return `\\href{${href}}{\\underline{${escapeLatex(displayUrl)}}}`;
   };
 
   // Generate header section
@@ -160,24 +165,19 @@ export const generateLatexCode = (resumeData) => {
     \\resumeSubHeadingListStart`;
 
     projects.forEach(project => {
-      if (project.name && project.technologies && project.dates) {
-        projectsContent += `
-      \\resumeProjectHeading
-          {\\textbf{${escapeLatex(project.name)}} $|$ \\emph{${escapeLatex(project.technologies)}}}{${escapeLatex(project.dates)}}`;
-
+      if (project.name) {
+        let heading = `\\textbf{${escapeLatex(project.name)}}`;
+        if (project.technologies) heading += ` $|$ \\emph{${escapeLatex(project.technologies)}}`;
+        projectsContent += `\n      \\resumeProjectHeading
+          {${heading}}{${escapeLatex(project.dates || '')}}`;
         if (project.description && project.description.length > 0) {
           const validDescriptions = project.description.filter(desc => desc.trim());
           if (validDescriptions.length > 0) {
-            projectsContent += `
-          \\resumeItemListStart`;
-            
+            projectsContent += `\n          \\resumeItemListStart`;
             validDescriptions.forEach(desc => {
-              projectsContent += `
-            \\resumeItem{${escapeLatex(desc.trim())}}`;
+              projectsContent += `\n            \\resumeItem{${escapeLatex(desc.trim())}}`;
             });
-
-            projectsContent += `
-          \\resumeItemListEnd`;
+            projectsContent += `\n          \\resumeItemListEnd`;
           }
         }
       }
@@ -189,42 +189,54 @@ export const generateLatexCode = (resumeData) => {
     return projectsContent;
   };
 
+  // Generate certifications section
+  const generateCertifications = () => {
+    const { certifications } = resumeData;
+    if (!certifications || certifications.length === 0) return '';
+    // Check if any certification has actual content
+    const hasValidCert = certifications.some(cert => cert.name?.trim() || cert.issuer?.trim() || cert.date?.trim() || cert.credentialId?.trim());
+    if (!hasValidCert) return '';
+    let certContent = `\n\n%-----------CERTIFICATIONS-----------\n\\section{Certifications}\n  \\resumeSubHeadingListStart`;
+    certifications.forEach(cert => {
+      if (cert.name && cert.issuer && cert.date) {
+        let certLine = `\\textbf{${escapeLatex(cert.name)}}`;
+        certLine += ` $|$ ${escapeLatex(cert.issuer)}`;
+        certLine += ` $|$ ${escapeLatex(cert.date)}`;
+        if (cert.credentialId) {
+          certLine += ` $|$ Credential ID: ${escapeLatex(cert.credentialId)}`;
+        }
+        certContent += `\n    \\resumeSubItem{${certLine}}`;
+      }
+    });
+    certContent += `\n  \\resumeSubHeadingListEnd`;
+    return certContent;
+  };
+
   // Generate skills section
   const generateSkills = () => {
     const { languages, frameworks, developerTools, libraries } = skills;
     
     if (!languages && !frameworks && !developerTools && !libraries) return '';
 
-    let skillsContent = `
+    // Helper to sanitize skill strings: remove newlines and trim spaces
+    const sanitize = (str) => str ? str.replace(/\s*\n\s*/g, ' ').replace(/\s+/g, ' ').trim() : '';
 
-%-----------PROGRAMMING SKILLS-----------
-\\section{Technical Skills}
- \\begin{itemize}[leftmargin=0.15in, label={}]
-    \\small{\\item{`;
+    let skillsContent = `\n\n%-----------PROGRAMMING SKILLS-----------\n\\section{Technical Skills}\n \\begin{itemize}[leftmargin=0.15in, label={}]\n `;
 
-    const skillItems = [];
-    
+    // Output each skill category as its own list item
     if (languages) {
-      skillItems.push(`\\textbf{Languages}{: ${escapeLatex(languages)}}`);
+      skillsContent += `\n    \\item \\small{\\textbf{Languages:} ${escapeLatex(languages)}}`;
     }
-    
     if (frameworks) {
-      skillItems.push(`\\textbf{Frameworks}{: ${escapeLatex(frameworks)}}`);
+      skillsContent += `\n    \\item \\small{\\textbf{Frameworks:} ${escapeLatex(frameworks)}}`;
     }
-    
     if (developerTools) {
-      skillItems.push(`\\textbf{Developer Tools}{: ${escapeLatex(developerTools)}}`);
+      skillsContent += `\n    \\item \\small{\\textbf{Developer Tools:} ${escapeLatex(developerTools)}}`;
     }
-    
     if (libraries) {
-      skillItems.push(`\\textbf{Libraries}{: ${escapeLatex(libraries)}}`);
+      skillsContent += `\n    \\item \\small{\\textbf{Libraries:} ${escapeLatex(libraries)}}`;
     }
-
-    skillsContent += `
-     ${skillItems.join(' \\\\\n     ')}
-    }}
- \\end{itemize}`;
-
+    skillsContent += '\n \\end{itemize}';
     return skillsContent;
   };
 
@@ -337,7 +349,7 @@ export const generateLatexCode = (resumeData) => {
 \\begin{document}
 
 %----------HEADING----------
-${generateHeader()}${generateEducation()}${generateExperience()}${generateProjects()}${generateSkills()}
+${generateHeader()}${generateEducation()}${generateExperience()}${generateProjects()}${generateSkills()}${generateCertifications()}
 
 
 %-------------------------------------------
