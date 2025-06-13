@@ -298,21 +298,20 @@ const ResumeGenerator = () => {
   };
 
   const loadSampleData = () => {
-    setResumeData(sampleResumeData);
-    toast.success("Sample data loaded! You can now see Jake's resume and modify it.", {
-      style: {
-        background: '#222',
-        color: '#fff',
-        fontSize: '1rem',
-        borderRadius: '0.75rem',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.12)'
-      },
-      iconTheme: {
-        primary: '#FF6542',
-        secondary: '#fff',
-      },
-      duration: 2500
+    setResumeData({
+      ...sampleResumeData,
+      // Ensure certifications array exists even if not in sample data
+      certifications: sampleResumeData.certifications || [
+        {
+          name: '',
+          issuer: '',
+          date: '',
+          credentialId: ''
+        }
+      ]
     });
+    // Remove toast and use a simple alert instead
+    alert("Sample data loaded! You can now see Jake's resume and modify it.");
   };
 
   const tabs = [

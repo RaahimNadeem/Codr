@@ -45,7 +45,7 @@ export const sampleResumeData = {
     },
     {
       title: 'Developer',
-      company: 'Python',
+      company: 'Codup',
       location: 'Remote',
       dates: 'May 2023 — Feb 2024',
       responsibilities: [
@@ -76,5 +76,16 @@ export const sampleResumeData = {
     languages: 'Java, Python, C/C++, SQL (PostgreSQL, MySQL, OracleSQL), JavaScript, Go, Haskell, HTML/CSS',
     frameworks: 'React.js, Next.js, Tailwind CSS, Node.js, Express.js, BullMQ, Mantine, MUI, FastAPI',
     developerTools: 'Git, Docker, Google Cloud Platform, VS Code, Visual Studio, PyCharm, IntelliJ, Eclipse',
-  }
+    // libraries: 'MongoDB, Knex.js, pandas, NumPy, TensorFlow, XGBoost',
+    // softSkills: 'Leadership, Team Collaboration, Problem Solving, Project Management, Communication',
+    // languages_spoken: 'English (Fluent), Urdu (Native), Arabic (Conversational)'
+  },
+  // certifications: [
+  //   {
+  //     name: 'AWS Certified Solutions Architect',
+  //     issuer: 'Amazon Web Services',
+  //     date: 'June 2024',
+  //     credentialId: 'AWS-SAA-123456'
+  //   }
+  // ]
 };

@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 });
 
 const PDFPreview = ({ resumeData }) => {
-  const { personalInfo, education, experience, projects, skills } = resumeData;
+  const { personalInfo, education, experience, projects, skills, certifications } = resumeData;
 
   return (
     <Document>
@@ -180,34 +180,68 @@ const PDFPreview = ({ resumeData }) => {
           </View>
         )}
 
-        {/* Technical Skills */}
-        {skills && (skills.languages || skills.frameworks || skills.developerTools || skills.libraries) && (
+        {/* Skills */}
+        {skills && (skills.languages || skills.frameworks || skills.developerTools || skills.libraries || skills.softSkills || skills.languages_spoken) && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Technical Skills</Text>
+            <Text style={styles.sectionTitle}>Skills</Text>
             {skills.languages && (
               <View style={styles.subsection}>
-                <Text style={styles.skillCategory}>Languages: </Text>
+                <Text style={styles.skillCategory}>Programming Languages: </Text>
                 <Text style={styles.skillList}>{skills.languages}</Text>
               </View>
             )}
             {skills.frameworks && (
               <View style={styles.subsection}>
-                <Text style={styles.skillCategory}>Frameworks: </Text>
+                <Text style={styles.skillCategory}>Frameworks & Technologies: </Text>
                 <Text style={styles.skillList}>{skills.frameworks}</Text>
               </View>
             )}
             {skills.developerTools && (
               <View style={styles.subsection}>
-                <Text style={styles.skillCategory}>Developer Tools: </Text>
+                <Text style={styles.skillCategory}>Tools & Software: </Text>
                 <Text style={styles.skillList}>{skills.developerTools}</Text>
               </View>
             )}
             {skills.libraries && (
               <View style={styles.subsection}>
-                <Text style={styles.skillCategory}>Libraries: </Text>
+                <Text style={styles.skillCategory}>Libraries & Databases: </Text>
                 <Text style={styles.skillList}>{skills.libraries}</Text>
               </View>
             )}
+            {skills.softSkills && (
+              <View style={styles.subsection}>
+                <Text style={styles.skillCategory}>Soft Skills: </Text>
+                <Text style={styles.skillList}>{skills.softSkills}</Text>
+              </View>
+            )}
+            {skills.languages_spoken && (
+              <View style={styles.subsection}>
+                <Text style={styles.skillCategory}>Languages: </Text>
+                <Text style={styles.skillList}>{skills.languages_spoken}</Text>
+              </View>
+            )}
+          </View>
+        )}
+
+        {/* Certifications */}
+        {certifications && certifications.some(cert => cert.name || cert.issuer) && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Certifications</Text>
+            {certifications.map((cert, index) => {
+              if (!cert.name && !cert.issuer) return null;
+              return (
+                <View key={index} style={styles.subsection}>
+                  <View style={styles.row}>
+                    <Text style={styles.jobTitle}>{cert.name}</Text>
+                    <Text style={styles.dates}>{cert.date}</Text>
+                  </View>
+                  <Text style={styles.company}>{cert.issuer}</Text>
+                  {cert.credentialId && (
+                    <Text style={styles.responsibility}>Credential ID: {cert.credentialId}</Text>
+                  )}
+                </View>
+              );
+            })}
           </View>
         )}
       </Page>
