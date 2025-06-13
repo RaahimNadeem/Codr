@@ -93,7 +93,7 @@ const NavBar = () => {
           {/* Logo - visible on mobile */}
           <div className="flex items-center sm:hidden">
             <Link to="/" className="text-lg font-bold text-[#FF6542]">
-              CODR
+              codr
             </Link>
           </div>
 
