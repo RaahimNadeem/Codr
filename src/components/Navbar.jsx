@@ -9,7 +9,7 @@ const navItems = [
   { name: "Tips & Prep", path: "/tips-prep" },
   { name: "Resources", path: "/resources" },
   { name: "Companies", path: "/companies" },
-  { name: "Resume Generator", path: "/resume-generator" },
+  { name: "Resume Generator", path: "/resume-generator", isNew: true },
 ];
 
 const NavBar = () => {
@@ -110,7 +110,14 @@ const NavBar = () => {
                     isScrolledUp ? "before:bg-white" : "before:bg-[#2b2b2b]"
                   }`}
               >
-                {item.name}
+                <span className="flex items-center gap-2">
+                  {item.name}
+                  {item.isNew && (
+                    <span className="bg-gradient-to-r from-[#FF6542] to-[#FF8A65] text-white text-[10px] px-2 py-0.5 rounded-full font-bold animate-pulse">
+                      NEW
+                    </span>
+                  )}
+                </span>
               </Link>
             ))}
           </div>
@@ -151,7 +158,14 @@ const NavBar = () => {
                   onClick={closeMobileMenu}
                   className="text-white text-lg font-medium py-4 px-4 rounded-lg hover:bg-[#FF6542] hover:text-white transition-all duration-300 border-b border-gray-600/30 last:border-b-0 group"
                 >
-                  <span className="block">{item.name}</span>
+                  <span className="flex items-center justify-between">
+                    <span>{item.name}</span>
+                    {item.isNew && (
+                      <span className="bg-gradient-to-r from-[#FF6542] to-[#FF8A65] text-white text-xs px-2 py-1 rounded-full font-bold animate-pulse ml-2">
+                        NEW
+                      </span>
+                    )}
+                  </span>
                   <div className="w-0 h-0.5 bg-[#FF6542] group-hover:w-full transition-all duration-300 mt-1"></div>
                 </Link>
               ))}
