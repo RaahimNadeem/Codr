@@ -16,4 +16,57 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
-  
+
+  /* Responsive table styles */
+  @media (max-width: 768px) {
+    .rdt_Table {
+      font-size: 12px !important;
+    }
+    
+    .rdt_TableCell {
+      padding: 8px 12px !important;
+    }
+    
+    .rdt_TableHeadRow {
+      min-height: 48px !important;
+    }
+    
+    .rdt_TableRow {
+      min-height: 44px !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .rdt_Table {
+      font-size: 11px !important;
+    }
+    
+    .rdt_TableCell {
+      padding: 6px 8px !important;
+    }
+    
+    .rdt_TableHeadRow {
+      min-height: 44px !important;
+    }
+    
+    .rdt_TableRow {
+      min-height: 40px !important;
+    }
+  }
+
+  /* Custom pagination styles for mobile */
+  @media (max-width: 640px) {
+    .rdt_Pagination {
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+    }
+    
+    .rdt_Pagination nav {
+      flex-wrap: wrap !important;
+    }
+    
+    .rdt_Pagination select {
+      font-size: 12px !important;
+      padding: 4px 8px !important;
+    }
+  }

@@ -86,8 +86,8 @@ const ResumeGenerator = () => {
   const updateEducation = (index, field, value) => {
     setResumeData(prev => ({
       ...prev,
-      education: prev.education.map((edu, i) => 
-        i === index ? { ...edu, [field]: value } : edu
+      education: (prev.education || []).map((edu, i) => 
+        i === index ? { ...(edu || {}), [field]: value } : edu
       )
     }));
   };
@@ -116,8 +116,8 @@ const ResumeGenerator = () => {
   const updateExperience = (index, field, value) => {
     setResumeData(prev => ({
       ...prev,
-      experience: prev.experience.map((exp, i) => 
-        i === index ? { ...exp, [field]: value } : exp
+      experience: (prev.experience || []).map((exp, i) => 
+        i === index ? { ...(exp || {}), [field]: value } : exp
       )
     }));
   };
@@ -125,10 +125,10 @@ const ResumeGenerator = () => {
   const updateExperienceResponsibility = (expIndex, respIndex, value) => {
     setResumeData(prev => ({
       ...prev,
-      experience: prev.experience.map((exp, i) => 
+      experience: (prev.experience || []).map((exp, i) => 
         i === expIndex ? {
           ...exp,
-          responsibilities: exp.responsibilities.map((resp, j) => 
+          responsibilities: (exp.responsibilities || []).map((resp, j) => 
             j === respIndex ? value : resp
           )
         } : exp
@@ -192,10 +192,10 @@ const ResumeGenerator = () => {
   const updateProjectDescription = (projIndex, descIndex, value) => {
     setResumeData(prev => ({
       ...prev,
-      projects: prev.projects.map((proj, i) => 
+      projects: (prev.projects || []).map((proj, i) => 
         i === projIndex ? {
           ...proj,
-          description: proj.description.map((desc, j) => 
+          description: (proj.description || []).map((desc, j) => 
             j === descIndex ? value : desc
           )
         } : proj
@@ -299,16 +299,103 @@ const ResumeGenerator = () => {
 
   const loadSampleData = () => {
     setResumeData({
-      ...sampleResumeData,
-      // Ensure certifications array exists even if not in sample data
-      certifications: sampleResumeData.certifications || [
-        {
+      // Personal Info - ensure all fields have values
+      personalInfo: {
+        name: sampleResumeData.personalInfo?.name || '',
+        phone: sampleResumeData.personalInfo?.phone || '',
+        email: sampleResumeData.personalInfo?.email || '',
+        linkedin: sampleResumeData.personalInfo?.linkedin || '',
+        github: sampleResumeData.personalInfo?.github || '',
+        website: sampleResumeData.personalInfo?.website || ''
+      },
+      
+      // Education - ensure array exists and filter out null/undefined elements
+      education: (() => {
+        const validEdu = (sampleResumeData.education || [])
+          .filter(edu => edu && typeof edu === 'object')
+          .map(edu => ({
+            institution: edu.institution || '',
+            location: edu.location || '',
+            degree: edu.degree || '',
+            dates: edu.dates || '',
+            gpa: edu.gpa || '',
+            honors: edu.honors || ''
+          }));
+        return validEdu.length > 0 ? validEdu : [{
+          institution: '',
+          location: '',
+          degree: '',
+          dates: '',
+          gpa: '',
+          honors: ''
+        }];
+      })(),
+      
+      // Experience - ensure array exists and filter out null/undefined elements
+      experience: (() => {
+        const validExp = (sampleResumeData.experience || [])
+          .filter(exp => exp && typeof exp === 'object')
+          .map(exp => ({
+            title: exp.title || '',
+            company: exp.company || '',
+            location: exp.location || '',
+            dates: exp.dates || '',
+            responsibilities: (exp.responsibilities || []).filter(r => r != null).map(r => r || '')
+          }));
+        return validExp.length > 0 ? validExp : [{
+          title: '',
+          company: '',
+          location: '',
+          dates: '',
+          responsibilities: ['']
+        }];
+      })(),
+      
+      // Projects - ensure array exists and filter out null/undefined elements
+      projects: (() => {
+        const validProj = (sampleResumeData.projects || [])
+          .filter(proj => proj && typeof proj === 'object')
+          .map(proj => ({
+            name: proj.name || '',
+            technologies: proj.technologies || '',
+            dates: proj.dates || '',
+            description: (proj.description || []).filter(d => d != null).map(d => d || '')
+          }));
+        return validProj.length > 0 ? validProj : [{
+          name: '',
+          technologies: '',
+          dates: '',
+          description: ['']
+        }];
+      })(),
+      
+      // Skills - ensure all fields have values
+      skills: {
+        languages: sampleResumeData.skills?.languages || '',
+        frameworks: sampleResumeData.skills?.frameworks || '',
+        developerTools: sampleResumeData.skills?.developerTools || '',
+        libraries: sampleResumeData.skills?.libraries || '',
+        softSkills: sampleResumeData.skills?.softSkills || '',
+        languages_spoken: sampleResumeData.skills?.languages_spoken || ''
+      },
+      
+      // Certifications - ensure array exists and filter out null/undefined elements
+      certifications: (() => {
+        const validCert = (sampleResumeData.certifications || [])
+          .filter(cert => cert && typeof cert === 'object')
+          .map(cert => ({
+            name: cert.name || '',
+            issuer: cert.issuer || '',
+            date: cert.date || '',
+            credentialId: cert.credentialId || ''
+          }));
+        return validCert.length > 0 ? validCert : [{
           name: '',
           issuer: '',
           date: '',
           credentialId: ''
-        }
-      ]
+        }];
+      })()
     });
     // Remove toast and use a simple alert instead
     alert("Sample data loaded! You can now see Jake's resume and modify it.");
@@ -430,7 +517,7 @@ const ResumeGenerator = () => {
                           <label className="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
                           <input
                             type="text"
-                            value={resumeData.personalInfo.name}
+                            value={resumeData.personalInfo.name || ''}
                             onChange={(e) => updatePersonalInfo('name', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="Jake Ryan"
@@ -440,7 +527,7 @@ const ResumeGenerator = () => {
                           <label className="block text-sm font-medium text-gray-300 mb-2">Phone Number *</label>
                           <input
                             type="text"
-                            value={resumeData.personalInfo.phone}
+                            value={resumeData.personalInfo.phone || ''}
                             onChange={(e) => updatePersonalInfo('phone', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="123-456-7890"
@@ -450,7 +537,7 @@ const ResumeGenerator = () => {
                           <label className="block text-sm font-medium text-gray-300 mb-2">Email Address *</label>
                           <input
                             type="email"
-                            value={resumeData.personalInfo.email}
+                            value={resumeData.personalInfo.email || ''}
                             onChange={(e) => updatePersonalInfo('email', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="jake@su.edu"
@@ -460,7 +547,7 @@ const ResumeGenerator = () => {
                           <label className="block text-sm font-medium text-gray-300 mb-2">LinkedIn Profile</label>
                           <input
                             type="text"
-                            value={resumeData.personalInfo.linkedin}
+                            value={resumeData.personalInfo.linkedin || ''}
                             onChange={(e) => updatePersonalInfo('linkedin', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="linkedin.com/in/jake"
@@ -470,7 +557,7 @@ const ResumeGenerator = () => {
                           <label className="block text-sm font-medium text-gray-300 mb-2">GitHub Profile</label>
                           <input
                             type="text"
-                            value={resumeData.personalInfo.github}
+                            value={resumeData.personalInfo.github || ''}
                             onChange={(e) => updatePersonalInfo('github', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="github.com/jake"
@@ -480,7 +567,7 @@ const ResumeGenerator = () => {
                           <label className="block text-sm font-medium text-gray-300 mb-2">Personal Website</label>
                           <input
                             type="text"
-                            value={resumeData.personalInfo.website}
+                            value={resumeData.personalInfo.website || ''}
                             onChange={(e) => updatePersonalInfo('website', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                             placeholder="www.jake.com"
@@ -507,7 +594,7 @@ const ResumeGenerator = () => {
                         </button>
                       </div>
                       
-                      {resumeData.education.map((edu, index) => (
+                      {(resumeData.education || []).filter(edu => edu).map((edu, index) => (
                         <div key={index} className="mb-8 p-6 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-semibold text-white">Education {index + 1}</h3>
@@ -525,7 +612,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Institution *</label>
                               <input
                                 type="text"
-                                value={edu.institution}
+                                value={edu.institution || ''}
                                 onChange={(e) => updateEducation(index, 'institution', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Southwestern University"
@@ -535,7 +622,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Location *</label>
                               <input
                                 type="text"
-                                value={edu.location}
+                                value={edu.location || ''}
                                 onChange={(e) => updateEducation(index, 'location', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Georgetown, TX"
@@ -545,7 +632,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Degree *</label>
                               <input
                                 type="text"
-                                value={edu.degree}
+                                value={edu.degree || ''}
                                 onChange={(e) => updateEducation(index, 'degree', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Bachelor of Arts in Computer Science, Minor in Business"
@@ -555,7 +642,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Dates *</label>
                               <input
                                 type="text"
-                                value={edu.dates}
+                                value={edu.dates || ''}
                                 onChange={(e) => updateEducation(index, 'dates', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Aug. 2018 -- May 2021"
@@ -565,7 +652,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">GPA (Optional)</label>
                               <input
                                 type="text"
-                                value={edu.gpa}
+                                value={edu.gpa || ''}
                                 onChange={(e) => updateEducation(index, 'gpa', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="3.85/4.0"
@@ -575,7 +662,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Honors/Awards (Optional)</label>
                               <input
                                 type="text"
-                                value={edu.honors}
+                                value={edu.honors || ''}
                                 onChange={(e) => updateEducation(index, 'honors', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Cum Laude, Dean's List"
@@ -604,7 +691,7 @@ const ResumeGenerator = () => {
                         </button>
                       </div>
                       
-                      {resumeData.experience.map((exp, expIndex) => (
+                      {(resumeData.experience || []).filter(exp => exp).map((exp, expIndex) => (
                         <div key={expIndex} className="mb-8 p-6 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-semibold text-white">Experience {expIndex + 1}</h3>
@@ -622,7 +709,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Job Title</label>
                               <input
                                 type="text"
-                                value={exp.title}
+                                value={exp.title || ''}
                                 onChange={(e) => updateExperience(expIndex, 'title', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Software Engineer"
@@ -632,7 +719,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Company</label>
                               <input
                                 type="text"
-                                value={exp.company}
+                                value={exp.company || ''}
                                 onChange={(e) => updateExperience(expIndex, 'company', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Tech Company"
@@ -642,7 +729,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Location</label>
                               <input
                                 type="text"
-                                value={exp.location}
+                                value={exp.location || ''}
                                 onChange={(e) => updateExperience(expIndex, 'location', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="San Francisco, CA"
@@ -652,7 +739,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Dates</label>
                               <input
                                 type="text"
-                                value={exp.dates}
+                                value={exp.dates || ''}
                                 onChange={(e) => updateExperience(expIndex, 'dates', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="June 2020 -- Present"
@@ -671,10 +758,10 @@ const ResumeGenerator = () => {
                                 <span className="text-sm">Add Point</span>
                               </button>
                             </div>
-                            {exp.responsibilities.map((resp, respIndex) => (
+                            {(exp.responsibilities || []).filter(resp => resp != null).map((resp, respIndex) => (
                               <div key={respIndex} className="flex items-center space-x-2 mb-2">
                                 <textarea
-                                  value={resp}
+                                  value={resp || ''}
                                   onChange={(e) => updateExperienceResponsibility(expIndex, respIndex, e.target.value)}
                                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
                                   rows="2"
@@ -713,7 +800,7 @@ const ResumeGenerator = () => {
                         </button>
                       </div>
                       
-                      {resumeData.projects.map((project, projIndex) => (
+                      {(resumeData.projects || []).filter(project => project).map((project, projIndex) => (
                         <div key={projIndex} className="mb-8 p-6 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-semibold text-white">Project {projIndex + 1}</h3>
@@ -731,7 +818,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Project Name</label>
                               <input
                                 type="text"
-                                value={project.name}
+                                value={project.name || ''}
                                 onChange={(e) => updateProject(projIndex, 'name', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Gitlytics"
@@ -741,7 +828,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Technologies</label>
                               <input
                                 type="text"
-                                value={project.technologies}
+                                value={project.technologies || ''}
                                 onChange={(e) => updateProject(projIndex, 'technologies', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="Python, Flask, React, PostgreSQL, Docker"
@@ -751,7 +838,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Dates</label>
                               <input
                                 type="text"
-                                value={project.dates}
+                                value={project.dates || ''}
                                 onChange={(e) => updateProject(projIndex, 'dates', e.target.value)}
                                 className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400"
                                 placeholder="June 2020 -- Present"
@@ -770,10 +857,10 @@ const ResumeGenerator = () => {
                                 <span className="text-sm">Add Point</span>
                               </button>
                             </div>
-                            {project.description.map((desc, descIndex) => (
+                            {(project.description || []).filter(desc => desc != null).map((desc, descIndex) => (
                               <div key={descIndex} className="flex items-center space-x-2 mb-2">
                                 <textarea
-                                  value={desc}
+                                  value={desc || ''}
                                   onChange={(e) => updateProjectDescription(projIndex, descIndex, e.target.value)}
                                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent resize-none"
                                   rows="2"
@@ -806,7 +893,7 @@ const ResumeGenerator = () => {
                         <div>
                           <label className="block text-sm font-medium text-gray-300 mb-2">Programming Languages <span className="text-xs text-gray-500">(for CS/Tech roles)</span></label>
                           <textarea
-                            value={resumeData.skills.languages}
+                            value={resumeData.skills.languages || ''}
                             onChange={(e) => updateSkills('languages', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
@@ -816,7 +903,7 @@ const ResumeGenerator = () => {
                         <div>
                           <label className="block text-sm font-medium text-gray-300 mb-2">Frameworks & Technologies <span className="text-xs text-gray-500">(for CS/Tech roles)</span></label>
                           <textarea
-                            value={resumeData.skills.frameworks}
+                            value={resumeData.skills.frameworks || ''}
                             onChange={(e) => updateSkills('frameworks', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
@@ -826,7 +913,7 @@ const ResumeGenerator = () => {
                         <div>
                           <label className="block text-sm font-medium text-gray-300 mb-2">Tools & Software</label>
                           <textarea
-                            value={resumeData.skills.developerTools}
+                            value={resumeData.skills.developerTools || ''}
                             onChange={(e) => updateSkills('developerTools', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
@@ -836,7 +923,7 @@ const ResumeGenerator = () => {
                         <div>
                           <label className="block text-sm font-medium text-gray-300 mb-2">Libraries & Databases <span className="text-xs text-gray-500">(for CS/Tech roles)</span></label>
                           <textarea
-                            value={resumeData.skills.libraries}
+                            value={resumeData.skills.libraries || ''}
                             onChange={(e) => updateSkills('libraries', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
@@ -846,7 +933,7 @@ const ResumeGenerator = () => {
                         <div>
                           <label className="block text-sm font-medium text-gray-300 mb-2">Soft Skills</label>
                           <textarea
-                            value={resumeData.skills.softSkills}
+                            value={resumeData.skills.softSkills || ''}
                             onChange={(e) => updateSkills('softSkills', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
@@ -856,7 +943,7 @@ const ResumeGenerator = () => {
                         <div>
                           <label className="block text-sm font-medium text-gray-300 mb-2">Languages Spoken</label>
                           <textarea
-                            value={resumeData.skills.languages_spoken}
+                            value={resumeData.skills.languages_spoken || ''}
                             onChange={(e) => updateSkills('languages_spoken', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
@@ -889,7 +976,7 @@ const ResumeGenerator = () => {
                           <span>Add Certification</span>
                         </button>
                       </div>
-                      {resumeData.certifications.map((cert, certIndex) => (
+                      {(resumeData.certifications || []).filter(cert => cert).map((cert, certIndex) => (
                         <div key={certIndex} className="mb-8 p-6 border border-gray-200 rounded-lg">
                           <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-semibold text-white">Certification {certIndex + 1}</h3>
@@ -910,7 +997,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Certification Name</label>
                               <input
                                 type="text"
-                                value={cert.name}
+                                value={cert.name || ''}
                                 onChange={e => setResumeData(prev => ({
                                   ...prev,
                                   certifications: prev.certifications.map((c, i) => i === certIndex ? { ...c, name: e.target.value } : c)
@@ -923,7 +1010,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Issuer *</label>
                               <input
                                 type="text"
-                                value={cert.issuer}
+                                value={cert.issuer || ''}
                                 onChange={e => setResumeData(prev => ({
                                   ...prev,
                                   certifications: prev.certifications.map((c, i) => i === certIndex ? { ...c, issuer: e.target.value } : c)
@@ -936,7 +1023,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Date</label>
                               <input
                                 type="text"
-                                value={cert.date}
+                                value={cert.date || ''}
                                 onChange={e => setResumeData(prev => ({
                                   ...prev,
                                   certifications: prev.certifications.map((c, i) => i === certIndex ? { ...c, date: e.target.value } : c)
@@ -949,7 +1036,7 @@ const ResumeGenerator = () => {
                               <label className="block text-sm font-medium text-gray-300 mb-2">Credential ID (if available)</label>
                               <input
                                 type="text"
-                                value={cert.credentialId}
+                                value={cert.credentialId || ''}
                                 onChange={e => setResumeData(prev => ({
                                   ...prev,
                                   certifications: prev.certifications.map((c, i) => i === certIndex ? { ...c, credentialId: e.target.value } : c)

@@ -1,6 +1,15 @@
 const Hero = () => {
   return (
-    <div className="relative h-dvh w-screen overflow-x-hidden">
+    <>
+      <style jsx>{`
+        .hero-image {
+          @media (max-height: 780px) {
+            width: 360px !important;
+            max-width: 28vw !important;
+          }
+        }
+      `}</style>
+      <div className="relative h-dvh w-screen overflow-x-hidden">
       {/* Main Page Background */}
       <div
         id="main-page"
@@ -123,10 +132,13 @@ const Hero = () => {
         <img
           src="/Videos/Portrait.png"
           alt="Portrait"
-          className="absolute bottom-0 max-w-5/10 left-1/2 transform -translate-x-1/2  sm:w-1/3 md:translate-x-1/3 sm:translate-x-1/5 lg:translate-x-1/5"
+          className="hero-image absolute bottom-0 max-w-5/10 left-1/2 transform -translate-x-1/2 sm:w-1/3 md:translate-x-1/3 sm:translate-x-1/5 lg:translate-x-1/5 
+                     w-[280px] sm:w-[320px] md:w-[360px] lg:w-[400px] xl:w-[550px]
+                     max-w-[25vw] md:max-w-[30vw] lg:max-w-[35vw] xl:max-w-[40vw]"
         />
       </div>
     </div>
+    </>
   );
 };
 

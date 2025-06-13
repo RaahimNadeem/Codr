@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Hero from "./components/Hero";
 import NavBar from "./components/Navbar";
 import TipsPrep from "./components/TipsAndPrep/TipsPrep";
-import Companies from "./components/Companies";
+import Companies from "./components/Companies/Companies";
 import ResourcesPage from "./components/Resources/ResourcesPage";
 import ResumeGenerator from "./components/ResumeGenerator/ResumeGenerator";
 import { Analytics } from "@vercel/analytics/react"
