@@ -79,109 +79,123 @@ const styles = StyleSheet.create({
 });
 
 const PDFPreview = ({ resumeData }) => {
-  const { personalInfo, education, experience, projects, skills, certifications } = resumeData;
+  // Add defensive checks to prevent errors
+  if (!resumeData) {
+    return (
+      <Document>
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header}>
+            <Text style={styles.name}>Resume Preview Error</Text>
+            <Text style={styles.contactInfo}>Resume data is not available</Text>
+          </View>
+        </Page>
+      </Document>
+    );
+  }
+
+  const {
+    personalInfo = {},
+    education = [],
+    experience = [],
+    projects = [],
+    skills = {},
+    certifications = []
+  } = resumeData;
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.name}>{personalInfo.name || 'Your Name'}</Text>
+          <Text style={styles.name}>{personalInfo?.name || 'Your Name'}</Text>
           <Text style={styles.contactInfo}>
-            {personalInfo.phone && personalInfo.email 
+            {personalInfo?.phone && personalInfo?.email 
               ? `${personalInfo.phone} | ${personalInfo.email}`
-              : personalInfo.phone || personalInfo.email || 'Contact Information'}
+              : personalInfo?.phone || personalInfo?.email || 'Contact Information'}
           </Text>
-          {(personalInfo.linkedin || personalInfo.github || personalInfo.website) && (
+          {(personalInfo?.linkedin || personalInfo?.github || personalInfo?.website) && (
             <Text style={styles.contactInfo}>
               {[personalInfo.linkedin, personalInfo.github, personalInfo.website]
                 .filter(Boolean)
-                .map(url => url.replace(/^https?:\/\//, ''))
+                .map(url => url?.replace(/^https?:\/\//, '') || url)
                 .join(' | ')}
             </Text>
           )}
         </View>
 
         {/* Education */}
-        {education && education.some(edu => edu.institution) && (
+        {education && education.length > 0 && education.some(edu => edu?.institution) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Education</Text>
-            {education.map((edu, index) => {
-              if (!edu.institution) return null;
-              return (
-                <View key={index} style={styles.subsection}>
-                  <View style={styles.row}>
-                    <Text style={styles.jobTitle}>{edu.institution}</Text>
-                    <Text style={styles.dates}>{edu.location}</Text>
-                  </View>
-                  <View style={styles.row}>
-                    <Text style={styles.company}>
-                      {edu.degree}
-                      {edu.gpa && `, GPA: ${edu.gpa}`}
-                      {edu.honors && `, ${edu.honors}`}
-                    </Text>
-                    <Text style={styles.location}>{edu.dates}</Text>
-                  </View>
+            {education.filter(edu => edu?.institution).map((edu, index) => (
+              <View key={index} style={styles.subsection}>
+                <View style={styles.row}>
+                  <Text style={styles.jobTitle}>{edu.institution || ''}</Text>
+                  <Text style={styles.dates}>{edu.location || ''}</Text>
                 </View>
-              );
-            })}
+                <View style={styles.row}>
+                  <Text style={styles.company}>
+                    {edu.degree || ''}
+                    {edu.gpa && `, GPA: ${edu.gpa}`}
+                    {edu.honors && `, ${edu.honors}`}
+                  </Text>
+                  <Text style={styles.location}>{edu.dates || ''}</Text>
+                </View>
+              </View>
+            ))}
           </View>
         )}
 
         {/* Experience */}
-        {experience && experience.some(exp => exp.title && exp.company) && (
+        {experience && experience.length > 0 && experience.some(exp => exp?.title && exp?.company) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Experience</Text>
-            {experience.map((exp, index) => {
-              if (!exp.title || !exp.company) return null;
-              return (
-                <View key={index} style={styles.subsection}>
-                  <View style={styles.row}>
-                    <Text style={styles.jobTitle}>{exp.title}</Text>
-                    <Text style={styles.dates}>{exp.dates}</Text>
-                  </View>
-                  <View style={styles.row}>
-                    <Text style={styles.company}>{exp.company}</Text>
-                    <Text style={styles.location}>{exp.location}</Text>
-                  </View>
-                  {exp.responsibilities && exp.responsibilities.filter(resp => resp.trim()).map((resp, respIndex) => (
-                    <Text key={respIndex} style={styles.bulletPoint}>
-                      • {resp.trim()}
-                    </Text>
-                  ))}
+            {experience.filter(exp => exp?.title && exp?.company).map((exp, index) => (
+              <View key={index} style={styles.subsection}>
+                <View style={styles.row}>
+                  <Text style={styles.jobTitle}>{exp.title || ''}</Text>
+                  <Text style={styles.dates}>{exp.dates || ''}</Text>
                 </View>
-              );
-            })}
+                <View style={styles.row}>
+                  <Text style={styles.company}>{exp.company || ''}</Text>
+                  <Text style={styles.location}>{exp.location || ''}</Text>
+                </View>
+                {exp.responsibilities && Array.isArray(exp.responsibilities) && 
+                 exp.responsibilities.filter(resp => resp && resp.trim()).map((resp, respIndex) => (
+                  <Text key={respIndex} style={styles.bulletPoint}>
+                    • {resp.trim()}
+                  </Text>
+                ))}
+              </View>
+            ))}
           </View>
         )}
 
         {/* Projects */}
-        {projects && projects.some(proj => proj.name) && (
+        {projects && projects.length > 0 && projects.some(proj => proj?.name) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Projects</Text>
-            {projects.map((project, index) => {
-              if (!project.name) return null;
-              return (
-                <View key={index} style={styles.subsection}>
-                  <View style={styles.row}>
-                    <Text style={styles.jobTitle}>
-                      {project.name} | {project.technologies}
-                    </Text>
-                    <Text style={styles.dates}>{project.dates}</Text>
-                  </View>
-                  {project.description && project.description.filter(desc => desc.trim()).map((desc, descIndex) => (
-                    <Text key={descIndex} style={styles.bulletPoint}>
-                      • {desc.trim()}
-                    </Text>
-                  ))}
+            {projects.filter(project => project?.name).map((project, index) => (
+              <View key={index} style={styles.subsection}>
+                <View style={styles.row}>
+                  <Text style={styles.jobTitle}>
+                    {project.name || ''} {project.technologies && `| ${project.technologies}`}
+                  </Text>
+                  <Text style={styles.dates}>{project.dates || ''}</Text>
                 </View>
-              );
-            })}
+                {project.description && Array.isArray(project.description) && 
+                 project.description.filter(desc => desc && desc.trim()).map((desc, descIndex) => (
+                  <Text key={descIndex} style={styles.bulletPoint}>
+                    • {desc.trim()}
+                  </Text>
+                ))}
+              </View>
+            ))}
           </View>
         )}
 
         {/* Skills */}
-        {skills && (skills.languages || skills.frameworks || skills.developerTools || skills.libraries || skills.softSkills || skills.languages_spoken) && (
+        {skills && (skills?.languages || skills?.frameworks || skills?.developerTools || skills?.libraries || skills?.softSkills || skills?.languages_spoken) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Skills</Text>
             {skills.languages && (
@@ -224,24 +238,21 @@ const PDFPreview = ({ resumeData }) => {
         )}
 
         {/* Certifications */}
-        {certifications && certifications.some(cert => cert.name || cert.issuer) && (
+        {certifications && certifications.length > 0 && certifications.some(cert => cert?.name || cert?.issuer) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Certifications</Text>
-            {certifications.map((cert, index) => {
-              if (!cert.name && !cert.issuer) return null;
-              return (
-                <View key={index} style={styles.subsection}>
-                  <View style={styles.row}>
-                    <Text style={styles.jobTitle}>{cert.name}</Text>
-                    <Text style={styles.dates}>{cert.date}</Text>
-                  </View>
-                  <Text style={styles.company}>{cert.issuer}</Text>
-                  {cert.credentialId && (
-                    <Text style={styles.responsibility}>Credential ID: {cert.credentialId}</Text>
-                  )}
+            {certifications.filter(cert => cert?.name || cert?.issuer).map((cert, index) => (
+              <View key={index} style={styles.subsection}>
+                <View style={styles.row}>
+                  <Text style={styles.jobTitle}>{cert.name || ''}</Text>
+                  <Text style={styles.dates}>{cert.date || ''}</Text>
                 </View>
-              );
-            })}
+                <Text style={styles.company}>{cert.issuer || ''}</Text>
+                {cert.credentialId && (
+                  <Text style={styles.responsibility}>Credential ID: {cert.credentialId}</Text>
+                )}
+              </View>
+            ))}
           </View>
         )}
       </Page>

@@ -78,7 +78,7 @@ const ResumeGenerator = () => {
       ...prev,
       personalInfo: {
         ...prev.personalInfo,
-        [field]: value
+        [field]: value || ''
       }
     }));
   };
@@ -109,7 +109,7 @@ const ResumeGenerator = () => {
   const removeEducation = (index) => {
     setResumeData(prev => ({
       ...prev,
-      education: prev.education.filter((_, i) => i !== index)
+      education: prev.education.length > 1 ? prev.education.filter((_, i) => i !== index) : prev.education
     }));
   };
 
@@ -152,7 +152,7 @@ const ResumeGenerator = () => {
   const removeExperience = (index) => {
     setResumeData(prev => ({
       ...prev,
-      experience: prev.experience.filter((_, i) => i !== index)
+      experience: prev.experience.length > 1 ? prev.experience.filter((_, i) => i !== index) : prev.experience
     }));
   };
 
@@ -174,7 +174,7 @@ const ResumeGenerator = () => {
       experience: prev.experience.map((exp, i) => 
         i === expIndex ? {
           ...exp,
-          responsibilities: exp.responsibilities.filter((_, j) => j !== respIndex)
+          responsibilities: exp.responsibilities.length > 1 ? exp.responsibilities.filter((_, j) => j !== respIndex) : exp.responsibilities
         } : exp
       )
     }));
@@ -218,7 +218,7 @@ const ResumeGenerator = () => {
   const removeProject = (index) => {
     setResumeData(prev => ({
       ...prev,
-      projects: prev.projects.filter((_, i) => i !== index)
+      projects: prev.projects.length > 1 ? prev.projects.filter((_, i) => i !== index) : prev.projects
     }));
   };
 
@@ -240,7 +240,7 @@ const ResumeGenerator = () => {
       projects: prev.projects.map((proj, i) => 
         i === projIndex ? {
           ...proj,
-          description: proj.description.filter((_, j) => j !== descIndex)
+          description: proj.description.length > 1 ? proj.description.filter((_, j) => j !== descIndex) : proj.description
         } : proj
       )
     }));
@@ -251,7 +251,7 @@ const ResumeGenerator = () => {
       ...prev,
       skills: {
         ...prev.skills,
-        [field]: value
+        [field]: value || ''
       }
     }));
   };
@@ -984,7 +984,7 @@ const ResumeGenerator = () => {
                               <button
                                 onClick={() => setResumeData(prev => ({
                                   ...prev,
-                                  certifications: prev.certifications.filter((_, i) => i !== certIndex)
+                                  certifications: prev.certifications.length > 1 ? prev.certifications.filter((_, i) => i !== certIndex) : prev.certifications
                                 }))}
                                 className="text-red-500 hover:text-red-700 transition-colors duration-300"
                               >
