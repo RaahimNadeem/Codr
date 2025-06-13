@@ -10,8 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mui/material": "^6.4.3",
-    "@mui/x-data-grid": "^7.26.0",
+    "@mui/material": "^7.1.1",
+    "@mui/icons-material": "^7.1.1",
+    "@mui/x-data-grid": "^8.5.2",
     "@react-pdf/renderer": "^4.3.0",
     "@studio-freight/lenis": "^1.0.42",
     "@tailwindcss/vite": "^4.0.5",
