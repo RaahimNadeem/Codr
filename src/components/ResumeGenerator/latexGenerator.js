@@ -214,27 +214,33 @@ export const generateLatexCode = (resumeData) => {
 
   // Generate skills section
   const generateSkills = () => {
-    const { languages, frameworks, developerTools, libraries } = skills;
+    const { languages, frameworks, developerTools, libraries, softSkills, languages_spoken } = skills;
     
-    if (!languages && !frameworks && !developerTools && !libraries) return '';
+    if (!languages && !frameworks && !developerTools && !libraries && !softSkills && !languages_spoken) return '';
 
     // Helper to sanitize skill strings: remove newlines and trim spaces
     const sanitize = (str) => str ? str.replace(/\s*\n\s*/g, ' ').replace(/\s+/g, ' ').trim() : '';
 
-    let skillsContent = `\n\n%-----------PROGRAMMING SKILLS-----------\n\\section{Technical Skills}\n \\begin{itemize}[leftmargin=0.15in, label={}]\n `;
+    let skillsContent = `\n\n%-----------SKILLS-----------\n\\section{Skills}\n \\begin{itemize}[leftmargin=0.15in, label={}]\n `;
 
     // Output each skill category as its own list item
     if (languages) {
-      skillsContent += `\n    \\item \\small{\\textbf{Languages:} ${escapeLatex(languages)}}`;
+      skillsContent += `\n    \\item \\small{\\textbf{Programming Languages:} ${escapeLatex(languages)}}`;
     }
     if (frameworks) {
-      skillsContent += `\n    \\item \\small{\\textbf{Frameworks:} ${escapeLatex(frameworks)}}`;
+      skillsContent += `\n    \\item \\small{\\textbf{Frameworks \\& Technologies:} ${escapeLatex(frameworks)}}`;
     }
     if (developerTools) {
-      skillsContent += `\n    \\item \\small{\\textbf{Developer Tools:} ${escapeLatex(developerTools)}}`;
+      skillsContent += `\n    \\item \\small{\\textbf{Tools \\& Software:} ${escapeLatex(developerTools)}}`;
     }
     if (libraries) {
-      skillsContent += `\n    \\item \\small{\\textbf{Libraries:} ${escapeLatex(libraries)}}`;
+      skillsContent += `\n    \\item \\small{\\textbf{Libraries \\& Databases:} ${escapeLatex(libraries)}}`;
+    }
+    if (softSkills) {
+      skillsContent += `\n    \\item \\small{\\textbf{Soft Skills:} ${escapeLatex(softSkills)}}`;
+    }
+    if (languages_spoken) {
+      skillsContent += `\n    \\item \\small{\\textbf{Languages:} ${escapeLatex(languages_spoken)}}`;
     }
     skillsContent += '\n \\end{itemize}';
     return skillsContent;

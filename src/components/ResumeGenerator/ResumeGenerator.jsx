@@ -48,7 +48,9 @@ const ResumeGenerator = () => {
       languages: '',
       frameworks: '',
       developerTools: '',
-      libraries: ''
+      libraries: '',
+      softSkills: '',
+      languages_spoken: ''
     },
     certifications: [
       {
@@ -340,7 +342,7 @@ const ResumeGenerator = () => {
             <span>Load Sample Data</span>
           </button>
           <p className="text-gray-300 mt-4 text-lg">
-            See Jake's original resume as an example and customize it for yourself
+            Tip: Keep your resume concise—limit it to one page preferably.          
           </p>
         </div>
 
@@ -381,18 +383,34 @@ const ResumeGenerator = () => {
                       <span>Generate LaTeX Code</span>
                     </button>
                     
-                    {/* Quick Preview Button */}
-                    <button
-                      onClick={() => {
-                        const latex = generateLatexCode(resumeData);
-                        setLatexCode(latex);
-                        setShowPDFPreview(true);
-                      }}
-                      className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center space-x-2"
-                    >
-                      <FaFilePdf />
-                      <span>Quick PDF Preview</span>
-                    </button>
+                    {/* Quick Preview/Download Button - responsive */}
+                    <div className="block sm:hidden">
+                      <PDFDownloadLink
+                        document={<PDFPreview resumeData={resumeData} />}
+                        fileName={`${resumeData.personalInfo.name?.replace(/\s+/g, '_') || 'resume'}.pdf`}
+                        className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center space-x-2"
+                      >
+                        {({ blob, url, loading, error }) => (
+                          <>
+                            <FaFilePdf />
+                            <span>{loading ? 'Generating...' : 'Download PDF'}</span>
+                          </>
+                        )}
+                      </PDFDownloadLink>
+                    </div>
+                    <div className="hidden sm:block">
+                      <button
+                        onClick={() => {
+                          const latex = generateLatexCode(resumeData);
+                          setLatexCode(latex);
+                          setShowPDFPreview(true);
+                        }}
+                        className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center space-x-2"
+                      >
+                        <FaFilePdf />
+                        <span>Quick PDF Preview</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -783,11 +801,11 @@ const ResumeGenerator = () => {
                     <div>
                       <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
                         <FaCode className="mr-3 text-[#FF6542]" />
-                        Technical Skills
+                        Skills <span className="text-sm font-normal text-gray-500 ml-2">(Optional)</span>
                       </h2>
                       <div className="space-y-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Programming Languages</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Programming Languages <span className="text-xs text-gray-500">(for CS/Tech roles)</span></label>
                           <textarea
                             value={resumeData.skills.languages}
                             onChange={(e) => updateSkills('languages', e.target.value)}
@@ -797,7 +815,7 @@ const ResumeGenerator = () => {
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Frameworks</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Frameworks & Technologies <span className="text-xs text-gray-500">(for CS/Tech roles)</span></label>
                           <textarea
                             value={resumeData.skills.frameworks}
                             onChange={(e) => updateSkills('frameworks', e.target.value)}
@@ -807,23 +825,43 @@ const ResumeGenerator = () => {
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Developer Tools</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Tools & Software</label>
                           <textarea
                             value={resumeData.skills.developerTools}
                             onChange={(e) => updateSkills('developerTools', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
-                            placeholder="Git, Docker, TravisCI, Google Cloud Platform, VS Code, Visual Studio, PyCharm, IntelliJ, Eclipse"
+                            placeholder="Git, Docker, Microsoft Office, Adobe Suite, Salesforce, Google Analytics, AutoCAD"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">Libraries</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Libraries & Databases <span className="text-xs text-gray-500">(for CS/Tech roles)</span></label>
                           <textarea
                             value={resumeData.skills.libraries}
                             onChange={(e) => updateSkills('libraries', e.target.value)}
                             className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
                             rows="2"
-                            placeholder="pandas, NumPy, Matplotlib"
+                            placeholder="pandas, NumPy, Matplotlib, MySQL, PostgreSQL, MongoDB"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Soft Skills</label>
+                          <textarea
+                            value={resumeData.skills.softSkills}
+                            onChange={(e) => updateSkills('softSkills', e.target.value)}
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
+                            rows="2"
+                            placeholder="Leadership, Communication, Project Management, Problem Solving, Team Collaboration"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-300 mb-2">Languages Spoken</label>
+                          <textarea
+                            value={resumeData.skills.languages_spoken}
+                            onChange={(e) => updateSkills('languages_spoken', e.target.value)}
+                            className="w-full px-4 py-3 bg-[#444] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6542] focus:border-transparent text-white placeholder-gray-400 resize-none"
+                            rows="2"
+                            placeholder="English (Native), Spanish (Fluent), French (Conversational)"
                           />
                         </div>
                       </div>
@@ -931,15 +969,15 @@ const ResumeGenerator = () => {
             </div>
           ) : showPDFPreview ? (
             // PDF Preview Section
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-7xl mx-auto">
               <div className="bg-[#2b2b2b] rounded-2xl p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-white">PDF Preview</h2>
-                  <div className="flex space-x-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-white mb-2 sm:mb-0">PDF Preview</h2>
+                  <div className="flex flex-col gap-3 w-full sm:w-auto sm:flex-row sm:gap-4">
                     <PDFDownloadLink
                       document={<PDFPreview resumeData={resumeData} />}
                       fileName={`${resumeData.personalInfo.name?.replace(/\s+/g, '_') || 'resume'}.pdf`}
-                      className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 flex items-center space-x-2"
+                      className="w-full sm:w-auto bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 flex items-center justify-center space-x-2"
                     >
                       {({ blob, url, loading, error }) => (
                         <>
@@ -955,56 +993,33 @@ const ResumeGenerator = () => {
                         setShowPDFPreview(false);
                         setShowPreview(true);
                       }}
-                      className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center space-x-2"
+                      className="w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center space-x-2"
                     >
                       <FaCode />
                       <span>View LaTeX</span>
                     </button>
                     <button
                       onClick={() => setShowPDFPreview(false)}
-                      className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300"
+                      className="w-full sm:w-auto bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-300 flex items-center justify-center"
                     >
                       Back to Edit
                     </button>
                   </div>
                 </div>
-                
-                <div className="border rounded-lg overflow-hidden" style={{ height: '600px' }}>
-                  <PDFViewer width="100%" height="100%">
+                {/* Responsive PDF Preview: scrollable and fits mobile screens */}
+                <div className="border rounded-lg overflow-auto w-full bg-[#222]" style={{ height: '80vh', minHeight: 240, maxHeight: 600 }}>
+                  <PDFViewer width="100%" height="100%" style={{ width: '100%', minWidth: 0, minHeight: 240 }}>
                     <PDFPreview resumeData={resumeData} />
                   </PDFViewer>
                 </div>
                 
                 <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h3 className="text-lg font-semibold text-blue-800 mb-2">PDF Options:</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="font-semibold text-blue-700 mb-2">Quick PDF (React-PDF)</h4>
-                      <p className="text-blue-600 text-sm mb-2">
-                        Download a basic PDF version immediately. Good for quick previews.
-                      </p>
-                      <PDFDownloadLink
-                        document={<PDFPreview resumeData={resumeData} />}
-                        fileName={`${resumeData.personalInfo.name?.replace(/\s+/g, '_') || 'resume'}_basic.pdf`}
-                        className="inline-block bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition-colors duration-300"
-                      >
-                        Download Basic PDF
-                      </PDFDownloadLink>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-blue-700 mb-2">Professional PDF (LaTeX)</h4>
-                      <p className="text-blue-600 text-sm mb-2">
-                        Compile LaTeX to get the exact Jake's template formatting.
-                      </p>
-                      <button
-                        onClick={generatePDFFromLatex}
-                        disabled={isGeneratingPDF}
-                        className="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isGeneratingPDF ? 'Compiling...' : 'Compile LaTeX PDF'}
-                      </button>
-                    </div>
-                  </div>
+                  <h3 className="text-lg font-semibold text-blue-800 mb-2">Resume Tips:</h3>
+                  <ul className="list-disc list-inside text-blue-600 text-sm space-y-1">
+                    <li>Keep your resume to one page if possible.</li>
+                    <li>Use clear, concise bullet points and action verbs.</li>
+                    <li>Tailor your resume for each job application.</li>
+                  </ul>
                 </div>
               </div>
             </div>

@@ -74,7 +74,7 @@ export const sampleResumeData = {
   ],
   skills: {
     languages: 'Java, Python, C/C++, SQL (PostgreSQL, MySQL, OracleSQL), JavaScript, Go, Haskell, HTML/CSS',
-    frameworks: 'React.js, Next.js, Tailwind CSS, Node.js, Express.js, BullMQ, Mantine, MUI, FastAPI, MongoDB, Knex.js',
+    frameworks: 'React.js, Next.js, Tailwind CSS, Node.js, Express.js, BullMQ, Mantine, MUI, FastAPI',
     developerTools: 'Git, Docker, Google Cloud Platform, VS Code, Visual Studio, PyCharm, IntelliJ, Eclipse',
   }
 };
