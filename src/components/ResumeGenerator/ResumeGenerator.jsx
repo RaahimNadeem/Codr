@@ -493,14 +493,14 @@ const ResumeGenerator = () => {
                   {/* Education */}
                   {activeTab === 'education' && (
                     <div>
-                      <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-white flex items-center">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+                        <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center">
                           <FaGraduationCap className="mr-3 text-[#FF6542]" />
                           Education
                         </h2>
                         <button
                           onClick={addEducation}
-                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center space-x-2"
+                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto whitespace-nowrap"
                         >
                           <FaPlus />
                           <span>Add Education</span>
@@ -590,14 +590,14 @@ const ResumeGenerator = () => {
                   {/* Experience */}
                   {activeTab === 'experience' && (
                     <div>
-                      <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-white flex items-center">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+                        <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center">
                           <FaBriefcase className="mr-3 text-[#FF6542]" />
                           Experience <span className="text-sm font-normal text-gray-500 ml-2">(Optional)</span>
                         </h2>
                         <button
                           onClick={addExperience}
-                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center space-x-2"
+                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto whitespace-nowrap"
                         >
                           <FaPlus />
                           <span>Add Experience</span>
@@ -699,14 +699,14 @@ const ResumeGenerator = () => {
                   {/* Projects */}
                   {activeTab === 'projects' && (
                     <div>
-                      <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-white flex items-center">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+                        <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center">
                           <FaCode className="mr-3 text-[#FF6542]" />
                           Projects <span className="text-sm font-normal text-gray-500 ml-2">(Optional)</span>
                         </h2>
                         <button
                           onClick={addProject}
-                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center space-x-2"
+                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto whitespace-nowrap"
                         >
                           <FaPlus />
                           <span>Add Project</span>
@@ -870,8 +870,8 @@ const ResumeGenerator = () => {
                   {/* Certifications */}
                   {activeTab === 'certifications' && (
                     <div>
-                      <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-white flex items-center">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+                        <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center">
                           <FaCertificate className="mr-3 text-[#FF6542]" />
                           Certifications <span className="text-sm font-normal text-gray-500 ml-2">(Optional)</span>
                         </h2>
@@ -883,7 +883,7 @@ const ResumeGenerator = () => {
                               { name: '', issuer: '', date: '', credentialId: '' }
                             ]
                           }))}
-                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center space-x-2"
+                          className="bg-[#FF6542] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto whitespace-nowrap"
                         >
                           <FaPlus />
                           <span>Add Certification</span>
